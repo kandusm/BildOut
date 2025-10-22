@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Download, Calendar, TrendingUp, DollarSign, Users, FileText } from 'lucide-react'
 import { AnalyticsCharts } from '@/components/analytics-charts'
 import { AnalyticsFilters } from '@/components/analytics-filters'
+import { getEffectiveSubscriptionPlan } from '@/lib/subscription/get-effective-plan'
 
 interface SearchParams {
   from?: string
@@ -36,7 +37,7 @@ export default async function AnalyticsPage({
   }
 
   const organization = profile.organizations as any
-  const currentPlan = organization?.subscription_plan || 'free'
+  const currentPlan = getEffectiveSubscriptionPlan(organization)
 
   // Analytics is only available for Pro and Agency plans
   if (currentPlan === 'free') {

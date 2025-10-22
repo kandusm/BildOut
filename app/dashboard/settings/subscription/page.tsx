@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Link from 'next/link'
 import { Check, X, Zap, Crown, Rocket } from 'lucide-react'
 import { PLANS, SUBSCRIPTION_PLANS } from '@/lib/subscription-config'
+import { getEffectiveSubscriptionPlan } from '@/lib/subscription/get-effective-plan'
 
 export default async function SubscriptionPage() {
   const supabase = await createClient()
@@ -25,9 +26,11 @@ export default async function SubscriptionPage() {
   }
 
   const organization = profile.organizations as any
-  const currentPlan = organization?.subscription_plan || 'free'
+  const currentPlan = getEffectiveSubscriptionPlan(organization)
+  const stripePlan = organization?.subscription_plan || 'free'
   const subscriptionStatus = organization?.subscription_status || 'active'
   const periodEnd = organization?.subscription_current_period_end
+  const hasOverride = organization?.subscription_override_plan !== null
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {

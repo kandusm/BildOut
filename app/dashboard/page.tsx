@@ -6,6 +6,7 @@ import { StripeConnectCard } from '@/components/stripe-connect-card'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { DollarSign, FileText, Users, TrendingUp, Clock, CheckCircle, AlertCircle, BarChart3 } from 'lucide-react'
+import { getEffectiveSubscriptionPlan } from '@/lib/subscription/get-effective-plan'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -27,7 +28,7 @@ export default async function DashboardPage() {
   }
 
   const organization = profile.organizations as any
-  const currentPlan = organization?.subscription_plan || 'free'
+  const currentPlan = getEffectiveSubscriptionPlan(organization)
   const hasAnalytics = currentPlan === 'pro' || currentPlan === 'agency'
 
   const orgId = profile.org_id

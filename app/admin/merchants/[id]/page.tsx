@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/table'
 import { notFound } from 'next/navigation'
 import { MerchantActions } from '@/components/admin/merchant-actions'
+import { SubscriptionOverride } from '@/components/admin/subscription-override'
 
 export default async function MerchantDetailPage({
   params,
@@ -25,7 +26,7 @@ export default async function MerchantDetailPage({
   const supabase = await createClient()
 
   // Fetch merchant details
-  const { data: merchant, error: merchantError } = await supabase
+  const { data: merchant, error: merchantError} = await supabase
     .from('users')
     .select(`
       id,
@@ -44,7 +45,12 @@ export default async function MerchantDetailPage({
         invoice_prefix,
         invoice_number_sequence,
         metadata,
-        created_at
+        created_at,
+        subscription_plan,
+        subscription_override_plan,
+        subscription_override_expires_at,
+        subscription_override_reason,
+        subscription_override_granted_at
       )
     `)
     .eq('id', id)
@@ -227,6 +233,17 @@ export default async function MerchantDetailPage({
           </div>
         </CardContent>
       </Card>
+
+      {/* Subscription Override */}
+      <SubscriptionOverride
+        merchantId={merchant.id}
+        merchantName={merchant.display_name || 'Unnamed Merchant'}
+        currentPlan={merchant.organizations?.subscription_plan || 'free'}
+        overridePlan={merchant.organizations?.subscription_override_plan || null}
+        overrideExpiresAt={merchant.organizations?.subscription_override_expires_at || null}
+        overrideReason={merchant.organizations?.subscription_override_reason || null}
+        overrideGrantedAt={merchant.organizations?.subscription_override_granted_at || null}
+      />
 
       {/* Invoice Statistics */}
       <Card>
