@@ -1,25 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir public)",
-      "Bash(dir:*)",
-      "Bash(del page.tsx)",
-      "Bash(ren:*)",
-      "Bash(move \"(marketing)\\_home-page.tsx\" \"page.tsx\")",
-      "mcp__ide__getDiagnostics",
-      "Bash(npm run dev)",
-      "Bash(ls -la \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\")",
-      "Bash(ls -la \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\\guides\")",
-      "Bash(ls \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\")",
-      "Bash(ls \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\\guides\")",
-      "Bash(ls \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\\home\")",
-      "Bash(git init)",
-      "Bash(git config user.name)",
-      "Bash(git add .)",
-      "Bash(if exist nul del nul)",
-      "Bash(git commit -m \"Initial commit: BildOut invoicing platform\n\n- Next.js 15 app with TypeScript and Tailwind CSS\n- Supabase authentication and database with RLS\n- Stripe Connect for payment processing\n- Stripe subscriptions (Free, Pro, Agency tiers)\n- Full invoicing workflow (create, send, track, pay)\n- Client and item management\n- PDF invoice generation\n- Admin dashboard for merchant management\n- Analytics and reporting (Pro/Agency)\n- Email integration with Resend\n- Legal pages (Privacy, Terms, Refund)\n- SEO content (templates, guides, city pages)\n- Production deployment guides and checklists\n- Comprehensive testing and security implementations\n\nReady for production deployment.\")",
-      "Bash(git remote add origin https://github.com/kandusm/BildOut.git)",
-      "Bash(git push -u origin main)"
+      "Bash(git push origin main)",
+      "Bash(git mv 20251016_add_subscription_fields.sql 010b_add_subscription_fields.sql)",
+      "Bash(git mv 002_verify_and_fix_trigger.sql 002b_verify_and_fix_trigger.sql)",
+      "Bash(git add -A)",
+      "Bash(git commit -m \"Fix migration naming convention\n\n- Rename 20251016_add_subscription_fields.sql → 010b_add_subscription_fields.sql\n- Rename 002_verify_and_fix_trigger.sql → 002b_verify_and_fix_trigger.sql\n- Ensures proper sequential order for production deployment\n- 010b must run before 011 (subscription override depends on subscription fields)\")"
     ],
     "deny": [],
     "ask": []
