@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir public)",
+      "Bash(dir:*)",
+      "Bash(del page.tsx)",
+      "Bash(ren:*)",
+      "Bash(move \"(marketing)\\_home-page.tsx\" \"page.tsx\")",
+      "mcp__ide__getDiagnostics",
+      "Bash(npm run dev)",
+      "Bash(ls -la \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\")",
+      "Bash(ls -la \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\\guides\")",
+      "Bash(ls \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\")",
+      "Bash(ls \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\\guides\")",
+      "Bash(ls \"C:\\Users\\kmacmillan\\invoice-app\\app\\(marketing)\\home\")",
+      "Bash(git init)",
+      "Bash(git config user.name)",
+      "Bash(git add .)",
+      "Bash(if exist nul del nul)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
