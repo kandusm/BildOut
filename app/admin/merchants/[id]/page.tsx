@@ -60,6 +60,11 @@ export default async function MerchantDetailPage({
     notFound()
   }
 
+  // Cast organizations to single object since it's a one-to-one relationship
+  const organization = Array.isArray(merchant.organizations)
+    ? merchant.organizations[0]
+    : merchant.organizations
+
   // Fetch invoices (including deleted ones to show them differently)
   const { data: invoices } = await supabase
     .from('invoices')
@@ -127,7 +132,7 @@ export default async function MerchantDetailPage({
             {merchant.display_name || 'Unnamed Merchant'}
           </h1>
           <p className="text-slate-600 mt-1">
-            {merchant.organizations?.name}
+            {organization?.name}
           </p>
         </div>
         <MerchantActions
@@ -208,7 +213,7 @@ export default async function MerchantDetailPage({
             </div>
             <div>
               <p className="text-sm font-medium text-slate-500">Invoice Prefix</p>
-              <p className="text-sm mt-1">{merchant.organizations?.invoice_prefix || 'QB'}</p>
+              <p className="text-sm mt-1">{organization?.invoice_prefix || 'QB'}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-slate-500">Account Created</p>
@@ -238,11 +243,11 @@ export default async function MerchantDetailPage({
       <SubscriptionOverride
         merchantId={merchant.id}
         merchantName={merchant.display_name || 'Unnamed Merchant'}
-        currentPlan={merchant.organizations?.subscription_plan || 'free'}
-        overridePlan={merchant.organizations?.subscription_override_plan || null}
-        overrideExpiresAt={merchant.organizations?.subscription_override_expires_at || null}
-        overrideReason={merchant.organizations?.subscription_override_reason || null}
-        overrideGrantedAt={merchant.organizations?.subscription_override_granted_at || null}
+        currentPlan={organization?.subscription_plan || 'free'}
+        overridePlan={organization?.subscription_override_plan || null}
+        overrideExpiresAt={organization?.subscription_override_expires_at || null}
+        overrideReason={organization?.subscription_override_reason || null}
+        overrideGrantedAt={organization?.subscription_override_granted_at || null}
       />
 
       {/* Invoice Statistics */}
