@@ -40,7 +40,8 @@ export function StripeConnectCard() {
 
     // Fetch current status
     fetchStatus()
-  }, [searchParams])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const fetchStatus = async () => {
     try {

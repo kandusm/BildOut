@@ -20,7 +20,7 @@ export async function POST(
     // Get user's org_id
     const { data: profile, error: profileError } = await supabase
       .from('users')
-      .select('org_id, organizations(*)')
+      .select('org_id, organizations!users_org_id_fkey(*)')
       .eq('id', user.id)
       .single()
 
@@ -134,7 +134,7 @@ export async function GET(
     // Get user's org_id
     const { data: profile, error: profileError } = await supabase
       .from('users')
-      .select('org_id, organizations(*)')
+      .select('org_id, organizations!users_org_id_fkey(*)')
       .eq('id', user.id)
       .single()
 

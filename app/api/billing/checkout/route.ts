@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     // Get user's organization
     const { data: profile } = await supabase
       .from('users')
-      .select('org_id, organizations(*)')
+      .select('org_id, organizations!users_org_id_fkey(*)')
       .eq('id', user.id)
       .single()
 

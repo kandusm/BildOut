@@ -19,7 +19,7 @@ export async function requireAdmin() {
   // Check if user is admin
   const { data: profile, error: profileError } = await supabase
     .from('users')
-    .select('id, display_name, is_admin, org_id, organizations(*)')
+    .select('id, display_name, is_admin, org_id, organizations!users_org_id_fkey(*)')
     .eq('id', user.id)
     .single()
 

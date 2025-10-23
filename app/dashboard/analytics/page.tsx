@@ -29,7 +29,7 @@ export default async function AnalyticsPage({
 
   const { data: profile } = await supabase
     .from('users')
-    .select('*, organizations(*)')
+    .select('*, organizations!users_org_id_fkey(*)')
     .eq('id', user.id)
     .single()
 

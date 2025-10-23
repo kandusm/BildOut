@@ -20,7 +20,7 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
   // Get user's org_id and Stripe info
   const { data: profile } = await supabase
     .from('users')
-    .select('org_id, stripe_connect_id, stripe_onboarding_complete, organizations(*)')
+    .select('org_id, stripe_connect_id, stripe_onboarding_complete, organizations!users_org_id_fkey(*)')
     .eq('id', user.id)
     .single()
 

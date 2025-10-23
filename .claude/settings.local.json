@@ -1,11 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git push origin main)",
-      "Bash(git mv 20251016_add_subscription_fields.sql 010b_add_subscription_fields.sql)",
-      "Bash(git mv 002_verify_and_fix_trigger.sql 002b_verify_and_fix_trigger.sql)",
-      "Bash(git add -A)",
-      "Bash(git commit -m \"Fix migration naming convention\n\n- Rename 20251016_add_subscription_fields.sql → 010b_add_subscription_fields.sql\n- Rename 002_verify_and_fix_trigger.sql → 002b_verify_and_fix_trigger.sql\n- Ensures proper sequential order for production deployment\n- 010b must run before 011 (subscription override depends on subscription fields)\")"
+      "Bash(git commit -m \"Fix analytics page revenue type assertion\")",
+      "Bash(npx tsc --noEmit)",
+      "Bash(git add emails/invoice-sent.tsx lib/subscription-config.ts lib/subscription/get-effective-plan.ts)",
+      "Bash(git commit -m \"Fix all remaining TypeScript errors\n\n- Fix email template variable naming conflict (invoiceNumber)\n- Allow null for unlimited teamMembers in subscription config\n- Add proper typing to feature access function\n\nAll TypeScript errors now resolved!\")",
+      "Bash(git commit --allow-empty -m \"Force deployment with updated NEXT_PUBLIC_APP_URL\")",
+      "Bash(curl -s https://bild-out.vercel.app/)",
+      "Bash(taskkill /F /PID 39344)",
+      "Bash(taskkill //F //PID 39344)",
+      "Bash(git checkout app/dashboard/page.tsx)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Read(//c/**)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

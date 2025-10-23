@@ -14,7 +14,7 @@ export default async function ContactPage() {
   if (user) {
     const { data } = await supabase
       .from('users')
-      .select('*, organizations(*)')
+      .select('*, organizations!users_org_id_fkey(*)')
       .eq('id', user.id)
       .single()
     profile = data

@@ -17,17 +17,27 @@ export default async function DashboardPage() {
   }
 
   // Fetch user's organization and profile
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('users')
-    .select('*, organizations(*)')
+    .select('*, organizations!users_org_id_fkey(*)')
     .eq('id', user.id)
     .single()
+
+  if (profileError) {
+    console.error('Profile fetch error:', profileError)
+    throw new Error(`Failed to load profile: ${profileError.message}`)
+  }
 
   if (!profile) {
     redirect('/login')
   }
 
   const organization = profile.organizations as any
+
+  if (!organization) {
+    throw new Error('No organization found for user')
+  }
+
   const currentPlan = getEffectiveSubscriptionPlan(organization)
   const hasAnalytics = currentPlan === 'pro' || currentPlan === 'agency'
 
