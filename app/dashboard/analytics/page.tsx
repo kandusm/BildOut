@@ -17,8 +17,9 @@ interface SearchParams {
 export default async function AnalyticsPage({
   searchParams,
 }: {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }) {
+  const params = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -47,9 +48,9 @@ export default async function AnalyticsPage({
   const orgId = profile.org_id
 
   // Parse date filters
-  const fromDate = searchParams.from || new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0]
-  const toDate = searchParams.to || new Date().toISOString().split('T')[0]
-  const statusFilter = searchParams.status
+  const fromDate = params.from || new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0]
+  const toDate = params.to || new Date().toISOString().split('T')[0]
+  const statusFilter = params.status
 
   // Build query with filters
   let invoiceQuery = supabase
