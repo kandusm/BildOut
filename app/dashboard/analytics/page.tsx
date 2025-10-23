@@ -106,7 +106,7 @@ export default async function AnalyticsPage({
   }, {} as Record<string, number>) || {}
 
   const topClients = Object.entries(clientRevenue)
-    .sort((a, b) => b[1] - a[1])
+    .sort((a, b) => (b[1] as number) - (a[1] as number))
     .slice(0, 5)
 
   // Group invoices by status
