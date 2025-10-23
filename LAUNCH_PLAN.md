@@ -423,6 +423,49 @@
 
 ---
 
+## Post-Launch Priorities & Research
+
+### Compliance & Legal (Within 3 Months)
+
+- [ ] **Sales Tax Collection Research**
+  - [ ] Research sales tax nexus requirements by state
+  - [ ] Determine if BildOut has nexus in any states (based on platform location)
+  - [ ] Research economic nexus thresholds (typically $100k revenue/200 transactions)
+  - [ ] Evaluate sales tax calculation APIs (Stripe Tax, TaxJar, Avalara)
+  - [ ] Decision: Implement sales tax collection or defer until threshold reached
+  - [ ] If implementing:
+    - [ ] Add structured address fields (street, city, state, zip, country)
+    - [ ] Require business address during onboarding
+    - [ ] Integrate sales tax API for automatic calculation
+    - [ ] Update invoice generation to include sales tax
+    - [ ] Update payment processing to collect tax
+    - [ ] Register for sales tax permits in applicable states
+    - [ ] Set up sales tax filing schedule
+
+- [ ] **Business Address Collection**
+  - [ ] Currently: Optional single-line text field in Settings
+  - [ ] For sales tax: Need structured address (city, state, zip required)
+  - [ ] Decision: Make address required or optional during signup vs later
+  - [ ] Consider international addresses (country field)
+
+### Disaster Recovery & Business Continuity
+
+- [ ] **Database Backup & Recovery Testing**
+  - [ ] Document and test Point-in-Time Recovery (PITR) process
+  - [ ] Create disaster recovery runbook
+  - [ ] Test full database restore from backup
+  - [ ] Document RTO (Recovery Time Objective) and RPO (Recovery Point Objective)
+  - [ ] Set up automated backup verification
+
+- [ ] **Service Provider Contingency Plans**
+  - [ ] Document backup plan if Supabase experiences outage
+  - [ ] Document backup plan if Stripe experiences outage
+  - [ ] Document backup plan if Vercel experiences outage
+  - [ ] Document backup plan if Resend experiences outage
+  - [ ] Create status page for communicating outages to users
+
+---
+
 ## Monitoring & Support Plan
 
 ### Daily Monitoring (First 2 Weeks)
