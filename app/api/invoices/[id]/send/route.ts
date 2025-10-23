@@ -5,7 +5,7 @@ import { generateInvoiceEmail } from '@/lib/email/templates/invoice-notification
 
 export async function POST(
   request: Request,
-  { params }: { context: any; params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params
