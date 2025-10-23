@@ -238,7 +238,7 @@ const comparisons: Record<string, ComparisonData> = {
           { feature: 'Simple, focused interface', theirs: false, ours: true },
         ],
       },
-    },
+    ],
     pros: [
       'Free plan available',
       'POS integration for retail',
