@@ -16,13 +16,8 @@ export async function GET() {
   const { data, error } = await supabase.rpc('exec_sql', { sql })
 
   if (error) {
-    // Try direct query if RPC doesn't exist
-    const { error: directError } = await supabase.from('_sqlrun').select().sql(sql)
-
-    if (directError) {
-      return NextResponse.json({ error: directError.message }, { status: 500 })
-    }
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  return NextResponse.json({ success: true, message: 'Migration applied' })
+  return NextResponse.json({ success: true, message: 'Migration applied', data })
 }
