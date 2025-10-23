@@ -20,7 +20,7 @@ export interface PlanFeatures {
     analytics: boolean
     exportData: boolean
     prioritySupport: boolean
-    teamMembers: number
+    teamMembers: number | null
     apiAccess: boolean
   }
   description: string

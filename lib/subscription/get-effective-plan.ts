@@ -44,7 +44,7 @@ export function hasFeatureAccess(
   plan: 'free' | 'pro' | 'agency',
   feature: 'analytics' | 'export' | 'team' | 'api' | 'branding'
 ): boolean {
-  const features = {
+  const features: Record<'free' | 'pro' | 'agency', Array<'analytics' | 'export' | 'team' | 'api' | 'branding'>> = {
     free: [],
     pro: ['analytics', 'export', 'branding'],
     agency: ['analytics', 'export', 'branding', 'team', 'api'],

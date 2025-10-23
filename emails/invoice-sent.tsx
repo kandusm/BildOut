@@ -81,7 +81,7 @@ export function InvoiceSentEmail({
           <Section style={invoiceBox}>
             <div style={invoiceHeader}>
               <Text style={invoiceLabel}>Invoice Number</Text>
-              <Text style={invoiceNumber}>{invoiceNumber}</Text>
+              <Text style={invoiceNumberStyle}>{invoiceNumber}</Text>
             </div>
 
             <Hr style={divider} />
@@ -232,7 +232,7 @@ const invoiceLabel = {
   margin: '0 0 4px',
 }
 
-const invoiceNumber = {
+const invoiceNumberStyle = {
   color: '#1e293b',
   fontSize: '24px',
   fontWeight: 'bold',
