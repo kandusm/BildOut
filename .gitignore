@@ -63,5 +63,8 @@ nul
 con
 prn
 aux
-com*
-lpt*
+com[0-9]
+lpt[0-9]
+
+# Production secrets
+PRODUCTION_ENV_VARS.md
