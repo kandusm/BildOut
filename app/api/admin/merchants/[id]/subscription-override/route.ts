@@ -4,9 +4,10 @@ import { NextRequest, NextResponse } from 'next/server'
 // Set subscription override
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
 
     // Check if user is admin
@@ -57,7 +58,7 @@ export async function POST(
     const { data: org, error: orgError } = await supabase
       .from('organizations')
       .select('id, name, subscription_plan')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (orgError || !org) {
@@ -77,7 +78,7 @@ export async function POST(
         subscription_override_granted_by: user.id,
         subscription_override_granted_at: new Date().toISOString(),
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select('*')
       .single()
 
@@ -108,9 +109,10 @@ export async function POST(
 // Remove subscription override
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const supabase = await createClient()
 
     // Check if user is admin
@@ -133,7 +135,7 @@ export async function DELETE(
     const { data: org, error: orgError } = await supabase
       .from('organizations')
       .select('id, name')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (orgError || !org) {
@@ -153,7 +155,7 @@ export async function DELETE(
         subscription_override_granted_by: null,
         subscription_override_granted_at: null,
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select('*')
       .single()
 

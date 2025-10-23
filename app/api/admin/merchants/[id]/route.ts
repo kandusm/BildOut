@@ -10,13 +10,13 @@ import { syncMerchantStripeData, getMerchantFinancialSummary } from '@/lib/admin
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify admin access
     await requireAdmin()
 
-    const merchantId = params.id
+    const { id: merchantId } = await params
     const supabase = await createClient()
 
     // Get merchant details
