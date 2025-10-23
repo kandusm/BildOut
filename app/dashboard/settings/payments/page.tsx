@@ -178,7 +178,7 @@ export default async function PaymentsSettingsPage() {
                   <div>
                     <p className="font-medium">You receive payment</p>
                     <p className="text-sm text-slate-600">
-                      Funds are deposited directly to your Stripe account (minus 1.5% platform fee)
+                      Funds are deposited directly to your Stripe account (minus 0.5% platform fee)
                     </p>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ export default async function PaymentsSettingsPage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2">
                   <span className="text-slate-700">BildOut Platform Fee</span>
-                  <span className="font-semibold">1.5%</span>
+                  <span className="font-semibold">0.5%</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-t">
                   <span className="text-slate-700">Stripe Payment Processing</span>

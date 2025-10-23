@@ -78,8 +78,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Calculate application fee (1.5% platform fee)
-    const applicationFeeAmount = Math.round(amount * 100 * 0.015)
+    // Calculate application fee (0.5% platform fee)
+    const applicationFeeAmount = Math.round(amount * 100 * 0.005)
 
     // Create Stripe PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
