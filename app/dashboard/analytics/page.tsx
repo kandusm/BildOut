@@ -264,7 +264,7 @@ export default async function AnalyticsPage({
                         </div>
                         <span className="font-medium text-slate-900">{name}</span>
                       </div>
-                      <span className="font-semibold text-emerald-600">{formatCurrency(revenue)}</span>
+                      <span className="font-semibold text-emerald-600">{formatCurrency(revenue as number)}</span>
                     </div>
                   ))}
                 </div>
