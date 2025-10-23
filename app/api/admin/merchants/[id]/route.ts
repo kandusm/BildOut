@@ -87,14 +87,19 @@ export async function GET(
     }
 
     // Try to sync latest Stripe data if they have a Connect account
-    let stripeData = null
+    let stripeData: any = null
     if (merchant.stripe_connect_id) {
       try {
-        stripeData = await syncMerchantStripeData(merchantId)
+        const syncData = await syncMerchantStripeData(merchantId)
 
         // Get financial summary
         const financialSummary = await getMerchantFinancialSummary(merchant.stripe_connect_id)
-        stripeData.financialSummary = financialSummary
+
+        // Combine the data
+        stripeData = {
+          ...syncData,
+          financialSummary
+        }
       } catch (error) {
         console.error('Error syncing Stripe data:', error)
         // Continue without Stripe data rather than failing the request
