@@ -22,9 +22,9 @@ export async function POST(request: NextRequest) {
           name,
           email
         ),
-        organizations:org_id (
+        organizations!invoices_org_id_fkey (
           name,
-          users!inner (
+          users!users_org_id_fkey!inner (
             stripe_connect_id
           )
         )

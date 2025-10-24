@@ -21,7 +21,7 @@ export default async function PaymentPage({ params }: { params: Promise<{ token:
       invoice_items (
         *
       ),
-      organizations:org_id (
+      organizations!invoices_org_id_fkey (
         name,
         logo_url,
         metadata
