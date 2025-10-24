@@ -14,18 +14,33 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'No signature' }, { status: 400 })
   }
 
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
-  if (!webhookSecret) {
-    console.error('STRIPE_WEBHOOK_SECRET not configured')
+  // Support multiple webhook secrets (one for connected accounts, one for platform)
+  const webhookSecrets = [
+    process.env.STRIPE_WEBHOOK_SECRET,
+    process.env.STRIPE_WEBHOOK_SECRET_CONNECT,
+  ].filter(Boolean) as string[]
+
+  if (webhookSecrets.length === 0) {
+    console.error('No webhook secrets configured')
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
   }
 
-  let event: Stripe.Event
+  let event: Stripe.Event | null = null
+  let lastError: Error | null = null
 
-  try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-  } catch (err) {
-    console.error('Webhook signature verification failed:', err)
+  // Try each webhook secret until one works
+  for (const secret of webhookSecrets) {
+    try {
+      event = stripe.webhooks.constructEvent(body, signature, secret)
+      break // Success! Stop trying
+    } catch (err) {
+      lastError = err as Error
+      // Continue to next secret
+    }
+  }
+
+  if (!event) {
+    console.error('Webhook signature verification failed with all secrets:', lastError)
     return NextResponse.json(
       { error: 'Webhook signature verification failed' },
       { status: 400 }
