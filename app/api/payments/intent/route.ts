@@ -37,6 +37,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if invoice can accept payments
+    if (invoice.status === 'draft') {
+      return NextResponse.json(
+        { error: 'Invoice must be sent before payments can be accepted' },
+        { status: 400 }
+      )
+    }
+
     if (invoice.status === 'paid' || invoice.status === 'void' || invoice.status === 'cancelled') {
       return NextResponse.json(
         { error: `Invoice is ${invoice.status} and cannot accept payments` },
