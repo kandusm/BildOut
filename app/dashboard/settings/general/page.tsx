@@ -15,7 +15,7 @@ export default async function GeneralSettingsPage() {
   // Get user's profile and organization
   const { data: profile } = await supabase
     .from('users')
-    .select('org_id, display_name, organizations!inner(*)')
+    .select('org_id, display_name, organizations!users_org_id_fkey!inner(*)')
     .eq('id', user.id)
     .single()
 

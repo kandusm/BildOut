@@ -17,7 +17,7 @@ export default async function BrandingSettingsPage() {
   // Get user's organization with branding settings
   const { data: profile } = await supabase
     .from('users')
-    .select('org_id, organizations!inner(*)')
+    .select('org_id, organizations!users_org_id_fkey!inner(*)')
     .eq('id', user.id)
     .single()
 
