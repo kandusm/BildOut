@@ -440,6 +440,21 @@
     - Consider adding retry logic to webhook handler
     - Add better error logging to identify exact failure point
 
+### Missing Features
+
+- [ ] **Password change functionality in settings**
+  - **Issue:** Users cannot change their password from the settings page
+  - **Current Status:** No password change UI in General Settings
+  - **Workaround:** Users can use "Forgot Password" flow from login page
+  - **Impact:** Low - Workaround exists, not blocking core functionality
+  - **Priority:** P2 (Medium) - Add within first month
+  - **Implementation needed:**
+    - Add "Change Password" section to General Settings form
+    - Require current password for security
+    - Add API endpoint for password update via Supabase Auth
+    - Test password reset email flow
+    - Validate password strength requirements
+
 ---
 
 ## Post-Launch Priorities & Research
