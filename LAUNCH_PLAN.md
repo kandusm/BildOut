@@ -423,6 +423,25 @@
 
 ---
 
+## Known Issues to Fix Post-Launch
+
+### Webhook Issues
+
+- [ ] **Merchant account.updated webhook not auto-syncing**
+  - **Issue:** When merchants complete Stripe Connect onboarding, the `account.updated` webhook fires successfully (200 OK) but the database UPDATE fails silently
+  - **Current Status:** Webhook is configured correctly and receives proper data from Stripe
+  - **Workaround:** Manual "Sync with Stripe" button works in admin panel
+  - **Impact:** Low - Admins can manually sync, doesn't affect payments or user experience
+  - **Root Cause:** Likely RLS policy issue or timing problem during webhook execution
+  - **Priority:** P2 (Medium) - Fix within first month
+  - **Investigation needed:**
+    - Check Vercel function logs for silent errors
+    - Review RLS policies for service role access
+    - Consider adding retry logic to webhook handler
+    - Add better error logging to identify exact failure point
+
+---
+
 ## Post-Launch Priorities & Research
 
 ### Compliance & Legal (Within 3 Months)
