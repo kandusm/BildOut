@@ -5,6 +5,7 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { resend } from '@/lib/email/client'
 import { PaymentReceiptEmail } from '@/emails/payment-receipt'
 import Stripe from 'stripe'
+import { logError, logInfo } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
   const body = await request.text()
@@ -41,6 +42,10 @@ export async function POST(request: NextRequest) {
 
   if (!event) {
     console.error('Webhook signature verification failed with all secrets:', lastError)
+    await logError(lastError || new Error('Webhook signature verification failed'), {
+      path: '/api/webhooks/stripe',
+      context: 'signature_verification',
+    })
     return NextResponse.json(
       { error: 'Webhook signature verification failed' },
       { status: 400 }
@@ -116,6 +121,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true })
   } catch (error) {
     console.error('Error processing webhook:', error)
+    await logError(error, {
+      path: '/api/webhooks/stripe',
+      eventType: event?.type,
+      eventId: event?.id,
+    })
     return NextResponse.json(
       { error: 'Webhook processing failed' },
       { status: 500 }
