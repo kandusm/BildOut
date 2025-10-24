@@ -1,9 +1,7 @@
-import { Logtail } from '@logtail/next'
+import { log } from '@logtail/next'
 
-// Initialize Logtail only if token is available
-const logtail = process.env.LOGTAIL_SOURCE_TOKEN
-  ? new Logtail(process.env.LOGTAIL_SOURCE_TOKEN)
-  : null
+// Use the log function from @logtail/next
+// It automatically uses LOGTAIL_SOURCE_TOKEN from env
 
 /**
  * Log an error to BetterStack
@@ -23,17 +21,16 @@ export async function logError(
   // Always log to console for development
   console.error('Error:', errorMessage, context)
 
-  // Send to BetterStack in production
-  if (logtail) {
+  // Send to BetterStack in production (only if token is configured)
+  if (process.env.LOGTAIL_SOURCE_TOKEN) {
     try {
-      await logtail.error(errorMessage, {
+      await log.error(errorMessage, {
         error: {
           message: errorMessage,
           stack: errorStack,
         },
         ...context,
       })
-      await logtail.flush()
     } catch (logtailError) {
       // Don't let logging errors crash the app
       console.error('Failed to log to BetterStack:', logtailError)
@@ -54,10 +51,9 @@ export async function logInfo(
 ) {
   console.log('Info:', message, context)
 
-  if (logtail) {
+  if (process.env.LOGTAIL_SOURCE_TOKEN) {
     try {
-      await logtail.info(message, context)
-      await logtail.flush()
+      await log.info(message, context)
     } catch (error) {
       console.error('Failed to log to BetterStack:', error)
     }
@@ -77,10 +73,9 @@ export async function logWarning(
 ) {
   console.warn('Warning:', message, context)
 
-  if (logtail) {
+  if (process.env.LOGTAIL_SOURCE_TOKEN) {
     try {
-      await logtail.warn(message, context)
-      await logtail.flush()
+      await log.warn(message, context)
     } catch (error) {
       console.error('Failed to log to BetterStack:', error)
     }
