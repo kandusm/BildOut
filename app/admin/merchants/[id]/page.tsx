@@ -14,6 +14,7 @@ import {
 import { notFound } from 'next/navigation'
 import { MerchantActions } from '@/components/admin/merchant-actions'
 import { SubscriptionOverride } from '@/components/admin/subscription-override'
+import { MerchantSyncButton } from '@/components/admin/merchant-sync-button'
 
 export default async function MerchantDetailPage({
   params,
@@ -135,12 +136,20 @@ export default async function MerchantDetailPage({
             {organization?.name}
           </p>
         </div>
-        <MerchantActions
-          merchantId={merchant.id}
-          merchantName={merchant.display_name || 'Unnamed Merchant'}
-          stripeConnectId={merchant.stripe_connect_id}
-          currentStatus={merchant.onboarding_status}
-        />
+        <div className="flex gap-2">
+          {merchant.stripe_connect_id && (
+            <MerchantSyncButton
+              merchantId={merchant.id}
+              merchantName={merchant.display_name || 'Unnamed Merchant'}
+            />
+          )}
+          <MerchantActions
+            merchantId={merchant.id}
+            merchantName={merchant.display_name || 'Unnamed Merchant'}
+            stripeConnectId={merchant.stripe_connect_id}
+            currentStatus={merchant.onboarding_status}
+          />
+        </div>
       </div>
 
       {/* Account Overview */}
