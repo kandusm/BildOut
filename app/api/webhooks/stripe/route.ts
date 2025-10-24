@@ -214,9 +214,10 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
     try {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'
       const paymentLink = `${appUrl}/pay/${invoiceWithClient.payment_link_token}`
+      const merchantName = invoiceWithClient.organizations?.name || 'BildOut'
 
       await resend.emails.send({
-        from: 'Acme <onboarding@resend.dev>', // Use test domain for now
+        from: `${merchantName} <noreply@bildout.com>`,
         to: [invoiceWithClient.clients.email],
         subject: `Payment Receipt - Invoice ${invoiceWithClient.number}`,
         react: PaymentReceiptEmail({

@@ -118,9 +118,11 @@ export async function POST(
         notes: invoice.notes || undefined,
       })
 
+      const merchantName = organization.name || 'BildOut'
+
       try {
         await resend.emails.send({
-          from: FROM_EMAIL,
+          from: `${merchantName} <noreply@bildout.com>`,
           to: invoice.clients.email,
           subject: emailContent.subject,
           html: emailContent.html,
