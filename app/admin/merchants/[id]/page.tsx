@@ -39,7 +39,7 @@ export default async function MerchantDetailPage({
       created_at,
       updated_at,
       org_id,
-      organizations (
+      organizations!users_org_id_fkey (
         id,
         name,
         invoice_prefix,

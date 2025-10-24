@@ -44,7 +44,7 @@ export default async function MerchantsListPage({
       payouts_enabled,
       stripe_balance,
       created_at,
-      organizations (
+      organizations!users_org_id_fkey (
         id,
         name
       )
