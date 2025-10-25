@@ -227,7 +227,7 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
       const merchantName = invoiceWithClient.organizations?.name || 'BildOut'
 
       await resend.emails.send({
-        from: `${merchantName} <noreply@bildout.com>`,
+        from: `${merchantName} <noreply@email.bildout.com>`,
         to: [invoiceWithClient.clients.email],
         subject: `Payment Receipt - Invoice ${invoiceWithClient.number}`,
         react: PaymentReceiptEmail({

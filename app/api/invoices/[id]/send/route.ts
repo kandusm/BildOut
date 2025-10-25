@@ -122,7 +122,7 @@ export async function POST(
 
       try {
         await resend.emails.send({
-          from: `${merchantName} <noreply@bildout.com>`,
+          from: `${merchantName} <noreply@email.bildout.com>`,
           to: invoice.clients.email,
           subject: emailContent.subject,
           html: emailContent.html,

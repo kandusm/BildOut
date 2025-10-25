@@ -6,4 +6,4 @@ if (!process.env.RESEND_API_KEY) {
 
 export const resend = new Resend(process.env.RESEND_API_KEY)
 
-export const FROM_EMAIL = process.env.FROM_EMAIL || 'BildOut <noreply@bildout.com>'
+export const FROM_EMAIL = process.env.FROM_EMAIL || 'BildOut <noreply@email.bildout.com>'
