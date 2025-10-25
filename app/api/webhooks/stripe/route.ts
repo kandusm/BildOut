@@ -392,9 +392,9 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   // Determine plan from subscription
   const priceId = subscription.items.data[0]?.price.id
   let plan = 'free'
-  if (priceId === process.env.STRIPE_PRO_PRICE_ID) {
+  if (priceId === process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID) {
     plan = 'pro'
-  } else if (priceId === process.env.STRIPE_AGENCY_PRICE_ID) {
+  } else if (priceId === process.env.NEXT_PUBLIC_STRIPE_AGENCY_PRICE_ID) {
     plan = 'agency'
   }
 

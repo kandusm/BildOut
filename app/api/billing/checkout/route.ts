@@ -58,8 +58,8 @@ export async function POST(request: NextRequest) {
 
     // Get the price ID based on plan
     const priceId = plan === 'pro'
-      ? process.env.STRIPE_PRO_PRICE_ID
-      : process.env.STRIPE_AGENCY_PRICE_ID
+      ? process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID
+      : process.env.NEXT_PUBLIC_STRIPE_AGENCY_PRICE_ID
 
     if (!priceId) {
       return NextResponse.json({ error: 'Price ID not configured' }, { status: 500 })
