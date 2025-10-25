@@ -214,7 +214,7 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
     .select(`
       *,
       clients (name, email),
-      organizations (name)
+      organizations!invoices_org_id_fkey (name)
     `)
     .eq('id', invoiceId)
     .single()
