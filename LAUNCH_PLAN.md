@@ -477,6 +477,45 @@
     - Should there be a time limit? (Recommend 30 days max)
     - What if partial payment received? (Block recall, require refund first)
 
+- [ ] **Export to accounting software (QuickBooks, Sage, Xero)**
+  - **Issue:** Users must manually enter invoice data into accounting software for bookkeeping
+  - **Current Status:** No export functionality
+  - **Workaround:** Manual data entry from BildOut to accounting software
+  - **Impact:** Medium-High - Time-consuming for users with many invoices, key feature for professional contractors
+  - **Priority:** P1 (High) - Add within 3-6 months (high user demand expected)
+  - **Implementation phases:**
+    - **Phase 1: CSV/Excel Export** (Easiest, 1-2 weeks)
+      - Export invoices to CSV format
+      - Export payments to CSV format
+      - Export clients to CSV format
+      - Include all relevant fields for manual import
+      - Date range filtering
+    - **Phase 2: QuickBooks Online Integration** (Medium, 1-2 months)
+      - OAuth integration with QuickBooks Online API
+      - Map BildOut invoices to QuickBooks invoices
+      - Map BildOut clients to QuickBooks customers
+      - Sync payments automatically
+      - Handle invoice status updates
+    - **Phase 3: Sage Integration** (Medium, 1-2 months)
+      - Research Sage API options (Sage 50, Sage Business Cloud)
+      - Similar mapping as QuickBooks
+      - May require different approach per Sage product
+    - **Phase 4: Xero Integration** (Medium, 1-2 months)
+      - OAuth integration with Xero API
+      - Similar mapping as QuickBooks
+  - **Technical considerations:**
+    - Chart of accounts mapping (income, assets, etc.)
+    - Tax handling differences between systems
+    - Multi-currency support
+    - Duplicate detection (don't re-export same invoice)
+    - Two-way sync vs one-way export
+    - Error handling for API failures
+  - **Business considerations:**
+    - May need Pro/Agency plan feature (premium tier)
+    - QuickBooks has ongoing OAuth costs
+    - Consider starting with CSV export for all users (free)
+    - API integrations as premium add-on ($10-20/month extra)
+
 ### Email & Notification Issues
 
 - [ ] **Stripe automatic receipts from connected accounts**
