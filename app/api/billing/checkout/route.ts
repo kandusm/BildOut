@@ -78,6 +78,7 @@ export async function POST(request: NextRequest) {
       ],
       success_url: `${request.nextUrl.origin}/dashboard/settings/subscription?success=true`,
       cancel_url: `${request.nextUrl.origin}/dashboard/settings/subscription?canceled=true`,
+      locale: 'en',
       metadata: {
         org_id: profile.org_id,
         plan,
