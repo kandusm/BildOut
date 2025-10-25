@@ -5,10 +5,14 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Pricing - Simple, Transparent Invoicing Plans | BildOut',
   description: 'Start free forever. Upgrade to Pro for $15/month for advanced features. No hidden fees, cancel anytime.',
+  alternates: {
+    canonical: '/pricing',
+  },
   openGraph: {
     title: 'Pricing - Simple, Transparent Invoicing Plans | BildOut',
     description: 'Start free forever. Upgrade to Pro for $15/month. No hidden fees.',
     type: 'website',
+    url: 'https://bildout.com/pricing',
   },
 }
 

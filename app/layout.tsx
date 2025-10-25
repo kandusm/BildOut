@@ -15,11 +15,15 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://bildout.com'),
   title: 'BildOut - Your work. Billed out.',
   description: 'Simple billing for builders, contractors, and small businesses. From quote to paid invoice, BildOut streamlines how you close out every job.',
   icons: {
     icon: '/logo.svg',
     apple: '/logo.svg',
+  },
+  alternates: {
+    canonical: '/',
   },
 }
 

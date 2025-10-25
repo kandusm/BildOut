@@ -8,11 +8,14 @@ import { StructuredData, schemas } from '@/components/seo/structured-data'
 export const metadata: Metadata = {
   title: 'BildOut - Simple Invoicing for Builders & Contractors',
   description: 'Create professional invoices, accept payments, and get paid faster. BildOut streamlines billing for construction companies, contractors, plumbers, electricians, and small businesses.',
+  alternates: {
+    canonical: '/home',
+  },
   openGraph: {
     title: 'BildOut - Simple Invoicing for Builders & Contractors',
     description: 'Create professional invoices, accept payments, and get paid faster.',
     type: 'website',
-    url: 'https://bildout.com',
+    url: 'https://bildout.com/home',
     images: [
       {
         url: '/og-image.png',
