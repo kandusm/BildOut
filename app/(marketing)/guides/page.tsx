@@ -5,10 +5,14 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Invoicing Guides - How to Get Paid Faster | BildOut',
   description: 'Learn how to create professional invoices, accept online payments, and get paid faster. Free guides for contractors, builders, and small businesses.',
+  alternates: {
+    canonical: '/guides',
+  },
   openGraph: {
     title: 'Invoicing Guides - How to Get Paid Faster | BildOut',
     description: 'Learn how to create professional invoices, accept online payments, and get paid faster.',
     type: 'website',
+    url: 'https://bildout.com/guides',
   },
 }
 

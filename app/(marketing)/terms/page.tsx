@@ -4,6 +4,15 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Terms of Service | BildOut',
   description: 'BildOut Terms of Service - Review the terms and conditions for using our invoicing platform.',
+  alternates: {
+    canonical: '/terms',
+  },
+  openGraph: {
+    title: 'Terms of Service | BildOut',
+    description: 'Review the terms and conditions for using our invoicing platform.',
+    type: 'website',
+    url: 'https://bildout.com/terms',
+  },
 }
 
 export default function TermsPage() {

@@ -5,10 +5,14 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Invoice Templates - Free Templates for Every Industry | BildOut',
   description: 'Professional invoice templates for construction, plumbing, electrical, landscaping, HVAC, and more. Free customizable templates designed for contractors and small businesses.',
+  alternates: {
+    canonical: '/templates',
+  },
   openGraph: {
     title: 'Invoice Templates - Free Templates for Every Industry | BildOut',
     description: 'Professional invoice templates for construction, plumbing, electrical, landscaping, HVAC, and more.',
     type: 'website',
+    url: 'https://bildout.com/templates',
   },
 }
 
