@@ -24,7 +24,10 @@ export default async function PaymentPage({ params }: { params: Promise<{ token:
       organizations!invoices_org_id_fkey (
         name,
         logo_url,
-        metadata
+        metadata,
+        users!users_org_id_fkey!inner (
+          stripe_connect_id
+        )
       )
     `)
     .eq('payment_link_token', token)
@@ -92,6 +95,10 @@ export default async function PaymentPage({ params }: { params: Promise<{ token:
   const brandColor = organization.metadata?.brand_color || '#EF4C23'
   const invoicePrefix = organization.metadata?.invoice_prefix || 'INV'
   const displayInvoiceNumber = `${invoicePrefix}-${invoice.number}`
+
+  // Check if merchant has Stripe Connect configured
+  const merchantUser = organization.users?.[0]
+  const hasStripeConnect = merchantUser?.stripe_connect_id ? true : false
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4">
@@ -247,15 +254,37 @@ export default async function PaymentPage({ params }: { params: Promise<{ token:
             )}
           </div>
 
-          {/* Right Column: Payment Form */}
+          {/* Right Column: Payment Form or Setup Message */}
           <div>
-            <PaymentForm
-              token={token}
-              invoiceNumber={invoice.number}
-              amountDue={invoice.amount_due}
-              depositRequired={invoice.deposit_required}
-              allowPartial={invoice.allow_partial}
-            />
+            {hasStripeConnect ? (
+              <PaymentForm
+                token={token}
+                invoiceNumber={invoice.number}
+                amountDue={invoice.amount_due}
+                depositRequired={invoice.deposit_required}
+                allowPartial={invoice.allow_partial}
+              />
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Payment Setup Required</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-slate-600">
+                    {organization.name} is still setting up online payment processing.
+                  </p>
+                  <p className="text-slate-600">
+                    Please contact them directly to arrange payment for this invoice.
+                  </p>
+                  {invoice.clients?.email && (
+                    <div className="p-4 bg-slate-50 rounded-lg">
+                      <p className="text-sm text-slate-600 mb-1">Invoice sent to:</p>
+                      <p className="font-medium">{invoice.clients.email}</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
 
