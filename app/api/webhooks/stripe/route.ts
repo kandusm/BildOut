@@ -386,17 +386,23 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   // Try to get org_id from metadata first (for programmatic checkouts)
   let orgId = subscription.metadata?.org_id
 
+  console.log('Subscription webhook - metadata org_id:', orgId)
+
   // If not in metadata, look up by customer ID (for Payment Links)
   if (!orgId && subscription.customer) {
     const customerId = typeof subscription.customer === 'string'
       ? subscription.customer
       : subscription.customer.id
 
-    const { data: org } = await supabase
+    console.log('Looking up org by customer ID:', customerId)
+
+    const { data: org, error: lookupError } = await supabase
       .from('organizations')
       .select('id')
       .eq('stripe_customer_id', customerId)
       .single()
+
+    console.log('Org lookup result:', { org, lookupError })
 
     if (org) {
       orgId = org.id
@@ -407,6 +413,8 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     console.error('Could not determine org_id for subscription:', subscription.id)
     return
   }
+
+  console.log('Processing subscription for org:', orgId)
 
   // Determine plan from subscription
   const priceId = subscription.items.data[0]?.price.id
@@ -451,17 +459,23 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   // Try to get org_id from metadata first (for programmatic checkouts)
   let orgId = subscription.metadata?.org_id
 
+  console.log('Subscription webhook - metadata org_id:', orgId)
+
   // If not in metadata, look up by customer ID (for Payment Links)
   if (!orgId && subscription.customer) {
     const customerId = typeof subscription.customer === 'string'
       ? subscription.customer
       : subscription.customer.id
 
-    const { data: org } = await supabase
+    console.log('Looking up org by customer ID:', customerId)
+
+    const { data: org, error: lookupError } = await supabase
       .from('organizations')
       .select('id')
       .eq('stripe_customer_id', customerId)
       .single()
+
+    console.log('Org lookup result:', { org, lookupError })
 
     if (org) {
       orgId = org.id
@@ -472,6 +486,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     console.error('Could not determine org_id for subscription:', subscription.id)
     return
   }
+
+  console.log('Processing subscription for org:', orgId)
 
   // Downgrade to free plan
   const { error } = await supabase
