@@ -209,7 +209,7 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
   }
 
   // Fetch invoice with client details for email
-  const { data: invoiceWithClient } = await supabase
+  const { data: invoiceWithClient, error: fetchError } = await supabase
     .from('invoices')
     .select(`
       *,
@@ -218,6 +218,13 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
     `)
     .eq('id', invoiceId)
     .single()
+
+  console.log('Invoice fetch for email:', {
+    hasData: !!invoiceWithClient,
+    hasClient: !!invoiceWithClient?.clients,
+    clientEmail: invoiceWithClient?.clients?.email,
+    error: fetchError
+  })
 
   // Send payment receipt email
   if (invoiceWithClient?.clients?.email) {
