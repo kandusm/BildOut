@@ -199,12 +199,11 @@ export default async function SubscriptionPage() {
                 {currentPlan === 'pro' ? (
                   <Button disabled className="w-full">Current Plan</Button>
                 ) : (
-                  <form action="/api/billing/checkout" method="POST">
-                    <input type="hidden" name="plan" value="pro" />
-                    <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+                  <Button asChild className="w-full bg-purple-600 hover:bg-purple-700">
+                    <a href="https://buy.stripe.com/eVq28jai6cm837i89bgQE00">
                       Upgrade to Pro
-                    </Button>
-                  </form>
+                    </a>
+                  </Button>
                 )}
               </CardContent>
             </Card>
@@ -251,12 +250,11 @@ export default async function SubscriptionPage() {
                 {currentPlan === 'agency' ? (
                   <Button disabled className="w-full">Current Plan</Button>
                 ) : (
-                  <form action="/api/billing/checkout" method="POST">
-                    <input type="hidden" name="plan" value="agency" />
-                    <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+                  <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
+                    <a href="https://buy.stripe.com/28EeV59e285S0ZagFHgQE01">
                       Upgrade to Agency
-                    </Button>
-                  </form>
+                    </a>
+                  </Button>
                 )}
               </CardContent>
             </Card>

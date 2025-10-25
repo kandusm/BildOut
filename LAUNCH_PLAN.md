@@ -455,6 +455,27 @@
     - Test password reset email flow
     - Validate password strength requirements
 
+- [ ] **Embedded Stripe Checkout for subscriptions**
+  - **Issue:** Stripe Payment Links work but redirect users away from the site
+  - **Current Status:** Using Payment Links as workaround for Stripe Checkout locale bug
+  - **Workaround:** Payment Links redirect to Stripe-hosted page and back
+  - **Impact:** Low - Payment Links work fine, but embedded checkout is more seamless
+  - **Priority:** P3 (Low) - Nice to have within 3-6 months
+  - **Implementation needed:**
+    - Convert subscription page to client component
+    - Add Stripe.js and Stripe Elements
+    - Create embedded checkout form component
+    - Handle session creation and completion callbacks
+    - Update checkout API to return client_secret instead of redirect
+  - **Benefits:**
+    - Keeps users on bildout.com throughout payment
+    - More control over styling and branding
+    - Better user experience (no redirect)
+  - **Considerations:**
+    - Requires client-side Stripe integration
+    - More complex than Payment Links
+    - Only needed if Payment Links cause issues
+
 - [ ] **Recall sent invoices for modification**
   - **Issue:** Once an invoice is sent, it cannot be recalled to make changes without voiding/canceling it
   - **Current Status:** Users must void the invoice and create a new one to make changes
