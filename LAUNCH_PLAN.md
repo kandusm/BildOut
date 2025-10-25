@@ -455,6 +455,41 @@
     - Test password reset email flow
     - Validate password strength requirements
 
+- [ ] **Recall sent invoices for modification**
+  - **Issue:** Once an invoice is sent, it cannot be recalled to make changes without voiding/canceling it
+  - **Current Status:** Users must void the invoice and create a new one to make changes
+  - **Workaround:** Void existing invoice and create new invoice with corrections
+  - **Impact:** Medium - Adds friction when mistakes are made on sent invoices
+  - **Priority:** P2 (Medium) - Add within 2-3 months
+  - **Implementation needed:**
+    - Add "Recall Invoice" button/action for sent invoices that haven't been paid
+    - Change invoice status from 'sent' back to 'draft'
+    - Clear sent_at timestamp
+    - Optionally: Send notification email to client that invoice was recalled
+    - Optionally: Invalidate/regenerate payment link token for security
+    - Add audit trail entry for recall action
+    - UI: Show recall option in invoice detail view and actions menu
+    - Validation: Only allow recall if invoice hasn't received any payments
+    - Validation: Only allow recall within X days of sending (e.g., 30 days)
+  - **Considerations:**
+    - Should payment link continue to work after recall? (Probably no - regenerate token)
+    - Should client be notified? (Yes, with option to disable notification)
+    - Should there be a time limit? (Recommend 30 days max)
+    - What if partial payment received? (Block recall, require refund first)
+
+### Email & Notification Issues
+
+- [ ] **Stripe automatic receipts from connected accounts**
+  - **Issue:** Merchants' Stripe Connect accounts send automatic payment receipts, causing customers to receive duplicate receipts (one from Stripe, one from BildOut)
+  - **Current Status:** Platform account has receipts disabled, but connected accounts send their own receipts
+  - **Workaround:** Each merchant can disable receipts in their Stripe Express dashboard
+  - **Impact:** Medium - Customers get confused receiving two receipts
+  - **Priority:** P2 (Medium) - Fix within first month
+  - **Implementation options:**
+    - Document for merchants to disable in their dashboard
+    - Or: Use Stripe API to disable receipts when creating/updating connected accounts
+    - Or: Add setting in merchant onboarding to disable Stripe receipts automatically
+
 ---
 
 ## Post-Launch Priorities & Research
