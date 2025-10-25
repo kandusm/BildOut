@@ -43,11 +43,12 @@ export default async function DashboardPage() {
 
   const orgId = profile.org_id
 
-  // Fetch analytics data
+  // Fetch analytics data (exclude deleted invoices)
   const { data: invoices } = await supabase
     .from('invoices')
     .select('*')
     .eq('org_id', orgId)
+    .is('deleted_at', null)
     .order('created_at', { ascending: false })
 
   const { data: payments } = await supabase
@@ -59,6 +60,7 @@ export default async function DashboardPage() {
     .from('clients')
     .select('id')
     .eq('org_id', orgId)
+    .is('deleted_at', null)
 
   // Calculate metrics
   const totalRevenue = invoices?.reduce((sum, inv) => sum + (inv.amount_paid || 0), 0) || 0
