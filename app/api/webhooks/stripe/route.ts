@@ -383,9 +383,28 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const orgId = subscription.metadata.org_id
+  // Try to get org_id from metadata first (for programmatic checkouts)
+  let orgId = subscription.metadata?.org_id
+
+  // If not in metadata, look up by customer ID (for Payment Links)
+  if (!orgId && subscription.customer) {
+    const customerId = typeof subscription.customer === 'string'
+      ? subscription.customer
+      : subscription.customer.id
+
+    const { data: org } = await supabase
+      .from('organizations')
+      .select('id')
+      .eq('stripe_customer_id', customerId)
+      .single()
+
+    if (org) {
+      orgId = org.id
+    }
+  }
+
   if (!orgId) {
-    console.error('Missing org_id in subscription metadata')
+    console.error('Could not determine org_id for subscription:', subscription.id)
     return
   }
 
@@ -429,9 +448,28 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const orgId = subscription.metadata.org_id
+  // Try to get org_id from metadata first (for programmatic checkouts)
+  let orgId = subscription.metadata?.org_id
+
+  // If not in metadata, look up by customer ID (for Payment Links)
+  if (!orgId && subscription.customer) {
+    const customerId = typeof subscription.customer === 'string'
+      ? subscription.customer
+      : subscription.customer.id
+
+    const { data: org } = await supabase
+      .from('organizations')
+      .select('id')
+      .eq('stripe_customer_id', customerId)
+      .single()
+
+    if (org) {
+      orgId = org.id
+    }
+  }
+
   if (!orgId) {
-    console.error('Missing org_id in subscription metadata')
+    console.error('Could not determine org_id for subscription:', subscription.id)
     return
   }
 
