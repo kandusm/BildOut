@@ -84,6 +84,14 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log('Checkout session created:', {
+      sessionId: session.id,
+      url: session.url,
+      customer: customerId,
+      priceId,
+      mode: session.mode,
+    })
+
     // Redirect to Checkout
     return NextResponse.redirect(session.url!)
   } catch (error: any) {
