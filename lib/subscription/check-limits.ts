@@ -31,6 +31,15 @@ export async function checkInvoiceLimit(orgId: string) {
   const limit = getFeatureLimit(plan, 'invoiceLimit')
   const reachedLimit = hasReachedLimit(plan, 'invoiceLimit', currentCount || 0)
 
+  console.log('Invoice limit check:', {
+    orgId,
+    plan,
+    limit,
+    currentCount,
+    reachedLimit,
+    startOfMonth: startOfMonth.toISOString(),
+  })
+
   return {
     allowed: !reachedLimit,
     limit,
