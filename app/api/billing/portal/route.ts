@@ -55,8 +55,8 @@ export async function POST(request: NextRequest) {
       url: session.url,
     })
 
-    // Redirect to billing portal
-    return NextResponse.redirect(session.url)
+    // Redirect to billing portal (303 forces GET request)
+    return NextResponse.redirect(session.url, 303)
   } catch (error: any) {
     console.error('Portal error:', error)
     return NextResponse.json(
