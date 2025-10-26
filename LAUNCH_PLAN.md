@@ -533,6 +533,43 @@
     - Guided setup experience
     - Professional invoices from day 1
 
+- [ ] **Display subscription override info on user's subscription page**
+  - **Issue:** Users with promotional/override subscriptions cannot see the override details
+  - **Current Status:** Override info only visible in admin panel, users don't know they have promotional access or when it expires
+  - **Workaround:** None - users are unaware of promotional status
+  - **Impact:** Low-Medium - Transparency issue, users should know if their access is promotional and temporary
+  - **Priority:** P3 (Low) - Add within 2-3 months post-launch
+  - **Implementation needed:**
+    - **UI changes to `/dashboard/settings/subscription` page:**
+      - Check if user has active subscription override (override_plan not null and not expired)
+      - Show promotional badge/banner if override is active
+      - Display override details in a special section:
+        - "Promotional Access" or "Special Access" heading
+        - Current override plan (Pro/Agency)
+        - Expiration date (if temporary) or "Permanent" label
+        - Reason for override (optional - may want to hide internal reasons)
+      - Show what happens after expiration (if temporary):
+        - "After [date], you will revert to [Stripe plan] plan"
+        - Encourage upgrading before expiration if they want to keep features
+    - **Code changes:**
+      - Query organization with override fields in subscription page
+      - Add helper function to check if override is active and not expired
+      - Pass override data to client component
+    - **UI/UX design:**
+      - Use distinct styling (e.g., gold/purple badge) for promotional access
+      - Clear messaging about temporary vs permanent overrides
+      - Call-to-action to upgrade before expiration (if temporary)
+      - Don't show "Manage Billing" for override plans (no Stripe subscription)
+  - **Considerations:**
+    - Should we show the reason field to users? (Probably not - keep it admin-only)
+    - Should expired overrides still show? (No - just revert to regular Stripe plan display)
+    - What if they have both override AND Stripe subscription? (Override takes precedence, show both)
+  - **User benefits:**
+    - Transparency about their subscription status
+    - Awareness of promotional access expiration
+    - Opportunity to upgrade before losing access
+    - Better user experience and trust
+
 - [ ] **Snapshot client data on invoices (prevent historical changes)**
   - **Issue:** Changing a client's name/email/address in the client list updates ALL historical invoices with that client
   - **Current Status:** Invoices fetch client data via live relationship, so edits propagate to all invoices
