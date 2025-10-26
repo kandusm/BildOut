@@ -498,6 +498,35 @@
     - Should there be a time limit? (Recommend 30 days max)
     - What if partial payment received? (Block recall, require refund first)
 
+- [ ] **Snapshot client data on invoices (prevent historical changes)**
+  - **Issue:** Changing a client's name/email/address in the client list updates ALL historical invoices with that client
+  - **Current Status:** Invoices fetch client data via live relationship, so edits propagate to all invoices
+  - **Workaround:** None - users should avoid changing client information after sending invoices
+  - **Impact:** High - Legal/tax compliance issue, historical records should be immutable
+  - **Priority:** P2 (Medium) - Implement with invoice recall feature (2-3 months)
+  - **Implementation needed:**
+    - **Database migration:**
+      - Add columns to `invoices` table: `client_name`, `client_email`, `client_address`, `client_phone`
+      - Backfill existing invoices with current client data
+    - **Code changes:**
+      - On invoice creation: Copy client data to invoice snapshot columns
+      - On invoice send: Lock snapshot data (prevent further changes)
+      - Update invoice display to use snapshot data instead of `clients` relationship
+      - Keep `client_id` foreign key for reference only
+    - **UI changes:**
+      - In draft mode: Allow editing client info directly on invoice (updates snapshot)
+      - After sending: Client info becomes read-only on invoice
+      - Show indicator if client data on invoice differs from current client record
+  - **Considerations:**
+    - Should we allow editing client snapshot in draft mode? (Yes - flexibility before sending)
+    - Should we show a warning if client data changed since invoice was sent? (Yes - helpful context)
+    - What about deleted clients? (Invoice retains snapshot, shows "Client Deleted" indicator)
+  - **Benefits:**
+    - Legal compliance - invoices match what was sent
+    - Tax accuracy - historical records don't change
+    - Audit trail - can see exactly what client info was on invoice when sent
+    - Prevents confusion - "ABC Company" rename to "XYZ Corp" doesn't affect old invoices
+
 - [ ] **Export to accounting software (QuickBooks, Sage, Xero)**
   - **Issue:** Users must manually enter invoice data into accounting software for bookkeeping
   - **Current Status:** No export functionality
