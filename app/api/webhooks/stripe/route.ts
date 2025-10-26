@@ -425,21 +425,45 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     plan = 'agency'
   }
 
+  // Prepare update data
+  const updateData: any = {
+    subscription_plan: plan,
+    subscription_status: subscription.status,
+    stripe_subscription_id: subscription.id,
+    subscription_current_period_start: (subscription as any).current_period_start
+      ? new Date((subscription as any).current_period_start * 1000).toISOString()
+      : null,
+    subscription_current_period_end: (subscription as any).current_period_end
+      ? new Date((subscription as any).current_period_end * 1000).toISOString()
+      : null,
+  }
+
+  // If user is upgrading to a paid plan (pro/agency), remove any "free" override
+  // This ensures paying customers always get their benefits
+  if (plan !== 'free') {
+    console.log(`User upgrading to ${plan}, checking for "free" override to remove`)
+
+    // Get current override status
+    const { data: currentOrg } = await supabase
+      .from('organizations')
+      .select('subscription_override_plan')
+      .eq('id', orgId)
+      .single()
+
+    if (currentOrg?.subscription_override_plan === 'free') {
+      console.log('Removing "free" override - user is now a paying customer')
+      updateData.subscription_override_plan = null
+      updateData.subscription_override_expires_at = null
+      updateData.subscription_override_reason = null
+      updateData.subscription_override_granted_by = null
+      updateData.subscription_override_granted_at = null
+    }
+  }
+
   // Update organization
-  const subData = subscription as any
   const { error } = await supabase
     .from('organizations')
-    .update({
-      subscription_plan: plan,
-      subscription_status: subscription.status,
-      stripe_subscription_id: subscription.id,
-      subscription_current_period_start: subData.current_period_start
-        ? new Date(subData.current_period_start * 1000).toISOString()
-        : null,
-      subscription_current_period_end: subData.current_period_end
-        ? new Date(subData.current_period_end * 1000).toISOString()
-        : null,
-    })
+    .update(updateData)
     .eq('id', orgId)
 
   if (error) {
