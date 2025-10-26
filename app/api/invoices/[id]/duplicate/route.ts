@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { checkInvoiceLimit } from '@/lib/subscription/check-limits'
 
 export async function POST(
   request: NextRequest,
@@ -38,6 +39,22 @@ export async function POST(
 
     if (invoiceError || !originalInvoice) {
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 })
+    }
+
+    // Check invoice limit for subscription plan
+    const limitCheck = await checkInvoiceLimit(profile.org_id)
+    if (!limitCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Invoice limit reached',
+          message: `You've reached your plan's limit of ${limitCheck.limit} invoices per month. Upgrade to Pro for unlimited invoices.`,
+          limit: limitCheck.limit,
+          current: limitCheck.current,
+          plan: limitCheck.plan,
+          upgradeRequired: true,
+        },
+        { status: 403 }
+      )
     }
 
     // Get the highest invoice number for this org
