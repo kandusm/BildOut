@@ -96,11 +96,18 @@ export function InvoiceActions({ invoiceId, invoiceNumber, status, paymentLinkTo
         method: 'POST',
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to duplicate invoice')
-      }
-
       const data = await response.json()
+
+      if (!response.ok) {
+        // Check if it's a limit error
+        if (data.upgradeRequired) {
+          alert(data.message)
+          router.push('/dashboard/settings/subscription')
+        } else {
+          throw new Error(data.error || 'Failed to duplicate invoice')
+        }
+        return
+      }
 
       // Redirect to the new invoice
       router.push(`/dashboard/invoices/${data.invoice.id}`)
