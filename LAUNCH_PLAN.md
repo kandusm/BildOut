@@ -498,6 +498,41 @@
     - Should there be a time limit? (Recommend 30 days max)
     - What if partial payment received? (Block recall, require refund first)
 
+- [ ] **Onboarding flow to collect organization data**
+  - **Issue:** New users receive magic link and go directly to dashboard without providing any organization information
+  - **Current Status:** Users can optionally add org data later in Settings, but most don't
+  - **Workaround:** None - organization data collection is entirely optional
+  - **Impact:** Medium - Missing organization data for analytics, limits ability to personalize experience, users miss setup guidance
+  - **Priority:** P2 (Medium) - Add within 1-2 months post-launch
+  - **Implementation needed:**
+    - **New onboarding page (`/onboarding`):**
+      - Trigger after magic link authentication for new users only
+      - Collect: Organization name, business address, company size, industry
+      - Optional: Phone number, website, tax ID
+      - Use multi-step form (2-3 steps) to reduce friction
+      - Allow "Skip for now" option to maintain low signup friction
+    - **Database changes:**
+      - Add `onboarding_completed` boolean to `users` or `organizations` table
+      - Store completion timestamp
+    - **Code changes:**
+      - Add middleware redirect: If logged in + !onboarding_completed → /onboarding
+      - Update organization settings to pre-fill with onboarding data
+      - Mark organization as onboarding_completed after form submission
+    - **UI/UX considerations:**
+      - Progress indicator (Step 1 of 3)
+      - Skip option prominent but not default action
+      - Mobile-friendly form design
+      - Clear value proposition (e.g., "This helps us personalize your invoices")
+  - **Analytics benefits:**
+    - Track company size distribution
+    - Segment users by industry
+    - Better understand target market
+    - Improve onboarding completion rates
+  - **User benefits:**
+    - Pre-fills invoice branding with org data
+    - Guided setup experience
+    - Professional invoices from day 1
+
 - [ ] **Snapshot client data on invoices (prevent historical changes)**
   - **Issue:** Changing a client's name/email/address in the client list updates ALL historical invoices with that client
   - **Current Status:** Invoices fetch client data via live relationship, so edits propagate to all invoices

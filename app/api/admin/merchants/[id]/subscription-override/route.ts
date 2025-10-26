@@ -54,11 +54,25 @@ export async function POST(
       )
     }
 
+    // Get user's org_id (id parameter is the user ID from /admin/merchants/[id])
+    const { data: merchantUser, error: userError } = await supabase
+      .from('users')
+      .select('org_id')
+      .eq('id', id)
+      .single()
+
+    if (userError || !merchantUser) {
+      return NextResponse.json(
+        { error: 'Merchant not found' },
+        { status: 404 }
+      )
+    }
+
     // Check if organization exists
     const { data: org, error: orgError } = await supabase
       .from('organizations')
       .select('id, name, subscription_plan')
-      .eq('id', id)
+      .eq('id', merchantUser.org_id)
       .single()
 
     if (orgError || !org) {
@@ -78,7 +92,7 @@ export async function POST(
         subscription_override_granted_by: user.id,
         subscription_override_granted_at: new Date().toISOString(),
       })
-      .eq('id', id)
+      .eq('id', merchantUser.org_id)
       .select('*')
       .single()
 
@@ -131,11 +145,25 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
+    // Get user's org_id (id parameter is the user ID from /admin/merchants/[id])
+    const { data: merchantUser, error: userError } = await supabase
+      .from('users')
+      .select('org_id')
+      .eq('id', id)
+      .single()
+
+    if (userError || !merchantUser) {
+      return NextResponse.json(
+        { error: 'Merchant not found' },
+        { status: 404 }
+      )
+    }
+
     // Check if organization exists
     const { data: org, error: orgError } = await supabase
       .from('organizations')
       .select('id, name')
-      .eq('id', id)
+      .eq('id', merchantUser.org_id)
       .single()
 
     if (orgError || !org) {
@@ -155,7 +183,7 @@ export async function DELETE(
         subscription_override_granted_by: null,
         subscription_override_granted_at: null,
       })
-      .eq('id', id)
+      .eq('id', merchantUser.org_id)
       .select('*')
       .single()
 
