@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { hasReachedLimit, getFeatureLimit, canAccessFeature, type SubscriptionPlan } from '@/lib/subscription-config'
+import { getEffectiveSubscriptionPlan } from '@/lib/subscription/get-effective-plan'
 
 /**
  * Check if organization has reached invoice limit for their plan
@@ -8,14 +9,14 @@ import { hasReachedLimit, getFeatureLimit, canAccessFeature, type SubscriptionPl
 export async function checkInvoiceLimit(orgId: string) {
   const supabase = await createClient()
 
-  // Get organization's subscription plan
+  // Get organization's subscription plan (including override fields)
   const { data: org } = await supabase
     .from('organizations')
-    .select('subscription_plan')
+    .select('*')
     .eq('id', orgId)
     .single()
 
-  const plan = (org?.subscription_plan || 'free') as SubscriptionPlan
+  const plan = getEffectiveSubscriptionPlan(org) as SubscriptionPlan
 
   // Get current invoice count for this month
   const startOfMonth = new Date()
@@ -55,14 +56,14 @@ export async function checkInvoiceLimit(orgId: string) {
 export async function checkClientLimit(orgId: string) {
   const supabase = await createClient()
 
-  // Get organization's subscription plan
+  // Get organization's subscription plan (including override fields)
   const { data: org } = await supabase
     .from('organizations')
-    .select('subscription_plan')
+    .select('*')
     .eq('id', orgId)
     .single()
 
-  const plan = (org?.subscription_plan || 'free') as SubscriptionPlan
+  const plan = getEffectiveSubscriptionPlan(org) as SubscriptionPlan
 
   // Get current client count
   const { count: currentCount } = await supabase
@@ -91,14 +92,14 @@ export async function checkFeatureAccess(
 ) {
   const supabase = await createClient()
 
-  // Get organization's subscription plan
+  // Get organization's subscription plan (including override fields)
   const { data: org } = await supabase
     .from('organizations')
-    .select('subscription_plan')
+    .select('*')
     .eq('id', orgId)
     .single()
 
-  const plan = (org?.subscription_plan || 'free') as SubscriptionPlan
+  const plan = getEffectiveSubscriptionPlan(org) as SubscriptionPlan
 
   return {
     allowed: canAccessFeature(plan, feature),

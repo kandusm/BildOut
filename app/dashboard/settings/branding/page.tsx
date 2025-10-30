@@ -5,6 +5,7 @@ import { BrandingForm } from '@/components/settings/branding-form'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Crown } from 'lucide-react'
 import Link from 'next/link'
+import { getEffectiveSubscriptionPlan } from '@/lib/subscription/get-effective-plan'
 
 export default async function BrandingSettingsPage() {
   const supabase = await createClient()
@@ -26,7 +27,7 @@ export default async function BrandingSettingsPage() {
   }
 
   const organization = profile.organizations as any
-  const subscriptionPlan = organization?.subscription_plan || 'free'
+  const subscriptionPlan = getEffectiveSubscriptionPlan(organization)
   const isFreePlan = subscriptionPlan === 'free'
 
   // Get the highest invoice number to determine next number

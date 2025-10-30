@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { renderToBuffer } from '@react-pdf/renderer'
 import { InvoicePDF } from '@/components/pdf/invoice-pdf'
+import { getEffectiveSubscriptionPlan } from '@/lib/subscription/get-effective-plan'
 
 export async function POST(
   request: NextRequest,
@@ -52,9 +53,9 @@ export async function POST(
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 })
     }
 
-    // Get organization subscription plan
+    // Get organization subscription plan (considers overrides)
     const organization = profile.organizations as any
-    const subscriptionPlan = organization?.subscription_plan || 'free'
+    const subscriptionPlan = getEffectiveSubscriptionPlan(organization)
 
     // Generate PDF
     const pdfBuffer = await renderToBuffer(
@@ -166,9 +167,9 @@ export async function GET(
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 })
     }
 
-    // Get organization subscription plan
+    // Get organization subscription plan (considers overrides)
     const organization = profile.organizations as any
-    const subscriptionPlan = organization?.subscription_plan || 'free'
+    const subscriptionPlan = getEffectiveSubscriptionPlan(organization)
 
     // Generate PDF and return as stream
     const pdfBuffer = await renderToBuffer(
