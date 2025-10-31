@@ -82,10 +82,10 @@ export async function GET(request: NextRequest) {
       id: account.id,
       email: account.email,
       type: account.type,
-      created: new Date(account.created * 1000).toISOString(),
-      charges_enabled: account.charges_enabled,
-      payouts_enabled: account.payouts_enabled,
-      details_submitted: account.details_submitted,
+      created: account.created ? new Date(account.created * 1000).toISOString() : new Date().toISOString(),
+      charges_enabled: account.charges_enabled || false,
+      payouts_enabled: account.payouts_enabled || false,
+      details_submitted: account.details_submitted || false,
     }))
 
     return NextResponse.json({
