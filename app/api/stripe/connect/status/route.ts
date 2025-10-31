@@ -22,7 +22,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
     }
 
-    const accountId = profile.stripe_connect_id
+    let accountId = profile.stripe_connect_id
 
     if (!accountId) {
       return NextResponse.json({
@@ -32,8 +32,30 @@ export async function GET() {
       })
     }
 
-    // Get Stripe account details
-    const account = await stripe.accounts.retrieve(accountId)
+    // Verify the account still exists in Stripe
+    let account
+    try {
+      account = await stripe.accounts.retrieve(accountId)
+    } catch (error: any) {
+      if (error.code === 'resource_missing') {
+        console.log('Stored Stripe account no longer exists, clearing from database')
+
+        // Clear the stale ID from database
+        await supabase
+          .from('users')
+          .update({ stripe_connect_id: null })
+          .eq('id', user.id)
+
+        // Return disconnected status
+        return NextResponse.json({
+          connected: false,
+          charges_enabled: false,
+          details_submitted: false,
+        })
+      } else {
+        throw error
+      }
+    }
 
     return NextResponse.json({
       connected: true,
