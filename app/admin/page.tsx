@@ -273,7 +273,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-3">
         <Card>
           <CardHeader>
             <CardTitle>Merchant Management</CardTitle>
@@ -284,6 +284,20 @@ export default async function AdminOverviewPage() {
           <CardContent>
             <Button asChild className="w-full">
               <Link href="/admin/merchants">View All Merchants</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Stripe Accounts</CardTitle>
+            <CardDescription>
+              View and delete Stripe Connect accounts
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline" className="w-full">
+              <Link href="/admin/stripe-accounts">Manage Stripe Accounts</Link>
             </Button>
           </CardContent>
         </Card>
