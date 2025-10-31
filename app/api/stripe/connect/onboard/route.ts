@@ -24,9 +24,31 @@ export async function POST(request: Request) {
 
     let accountId = profile.stripe_connect_id
 
-    // If no Stripe account exists in database, check if one exists in Stripe by email
+    // If we have a stored account ID, verify it still exists in Stripe
+    if (accountId) {
+      try {
+        console.log('Verifying stored Stripe account:', accountId)
+        await stripe.accounts.retrieve(accountId)
+        console.log('Stored Stripe account is valid')
+      } catch (error: any) {
+        if (error.code === 'resource_missing') {
+          console.log('Stored Stripe account no longer exists, clearing and searching by email')
+          accountId = null
+
+          // Clear the stale ID from database
+          await supabase
+            .from('users')
+            .update({ stripe_connect_id: null })
+            .eq('id', user.id)
+        } else {
+          throw error
+        }
+      }
+    }
+
+    // If no valid Stripe account exists, check if one exists in Stripe by email
     if (!accountId) {
-      console.log('No stripe_connect_id in database, searching Stripe by email:', user.email)
+      console.log('No valid stripe_connect_id, searching Stripe by email:', user.email)
 
       // Search for existing Stripe Connect accounts with this email
       const existingAccounts = await stripe.accounts.list({
