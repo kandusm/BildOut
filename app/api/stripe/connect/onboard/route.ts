@@ -31,8 +31,8 @@ export async function POST(request: Request) {
         await stripe.accounts.retrieve(accountId)
         console.log('Stored Stripe account is valid')
       } catch (error: any) {
-        if (error.code === 'resource_missing') {
-          console.log('Stored Stripe account no longer exists, clearing and searching by email')
+        if (error.code === 'resource_missing' || error.code === 'account_invalid') {
+          console.log('Stored Stripe account no longer accessible, clearing and searching by email')
           accountId = null
 
           // Clear the stale ID from database

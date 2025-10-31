@@ -37,8 +37,8 @@ export async function GET() {
     try {
       account = await stripe.accounts.retrieve(accountId)
     } catch (error: any) {
-      if (error.code === 'resource_missing') {
-        console.log('Stored Stripe account no longer exists, clearing from database')
+      if (error.code === 'resource_missing' || error.code === 'account_invalid') {
+        console.log('Stored Stripe account no longer accessible, clearing from database')
 
         // Clear the stale ID from database
         await supabase
