@@ -24,30 +24,68 @@ export async function POST(request: Request) {
 
     let accountId = profile.stripe_connect_id
 
-    // If no Stripe account exists, create one
+    // If no Stripe account exists in database, check if one exists in Stripe by email
     if (!accountId) {
-      const account = await stripe.accounts.create({
-        type: 'express',
-        email: user.email,
-        capabilities: {
-          card_payments: { requested: true },
-          transfers: { requested: true },
-          us_bank_account_ach_payments: { requested: true },
-        },
-        business_type: 'individual',
-        metadata: {
-          org_id: profile.org_id,
-          user_id: user.id,
-        },
+      console.log('No stripe_connect_id in database, searching Stripe by email:', user.email)
+
+      // Search for existing Stripe Connect accounts with this email
+      const existingAccounts = await stripe.accounts.list({
+        limit: 100,
       })
 
-      accountId = account.id
+      const matchingAccount = existingAccounts.data.find(
+        account => account.email?.toLowerCase() === user.email?.toLowerCase()
+      )
 
-      // Save the Stripe account ID to the user profile
-      await supabase
-        .from('users')
-        .update({ stripe_connect_id: accountId })
-        .eq('id', user.id)
+      if (matchingAccount) {
+        // Found existing account - reuse it
+        console.log('Found existing Stripe account:', matchingAccount.id)
+        accountId = matchingAccount.id
+
+        // Update metadata to current org/user
+        await stripe.accounts.update(matchingAccount.id, {
+          metadata: {
+            org_id: profile.org_id,
+            user_id: user.id,
+          },
+        })
+
+        // Save the Stripe account ID to the user profile
+        await supabase
+          .from('users')
+          .update({ stripe_connect_id: accountId })
+          .eq('id', user.id)
+
+        console.log('Linked existing Stripe account to user profile')
+      } else {
+        // No existing account found - create new one
+        console.log('No existing Stripe account found, creating new one')
+
+        const account = await stripe.accounts.create({
+          type: 'express',
+          email: user.email,
+          capabilities: {
+            card_payments: { requested: true },
+            transfers: { requested: true },
+            us_bank_account_ach_payments: { requested: true },
+          },
+          business_type: 'individual',
+          metadata: {
+            org_id: profile.org_id,
+            user_id: user.id,
+          },
+        })
+
+        accountId = account.id
+
+        // Save the Stripe account ID to the user profile
+        await supabase
+          .from('users')
+          .update({ stripe_connect_id: accountId })
+          .eq('id', user.id)
+
+        console.log('Created new Stripe account:', accountId)
+      }
     }
 
     // Create account link for onboarding
