@@ -28,7 +28,10 @@ export default function LoginPage() {
         password,
       })
 
+      console.log('Login response:', { data, error })
+
       if (error) {
+        console.error('Login error:', error)
         setMessage({ type: 'error', text: error.message })
       } else if (data.user) {
         // Check if email is confirmed
