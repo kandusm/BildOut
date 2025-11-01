@@ -7,39 +7,31 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-  const router = useRouter()
   const supabase = createClient()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleResetRequest = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setMessage(null)
 
     try {
-      const { data, error} = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/update-password`,
       })
 
       if (error) {
         setMessage({ type: 'error', text: error.message })
-      } else if (data.user) {
-        // Check if email is confirmed
-        if (!data.user.email_confirmed_at) {
-          // Email not confirmed - redirect to verification
-          sessionStorage.setItem('signup_email', email)
-          router.push('/verify-email')
-        } else {
-          // Success - redirect to dashboard
-          router.push('/dashboard')
-        }
+      } else {
+        setMessage({
+          type: 'success',
+          text: 'Password reset link sent! Check your email.'
+        })
+        setEmail('')
       }
     } catch (error) {
       setMessage({
@@ -63,24 +55,24 @@ export default function LoginPage() {
           <p className="text-slate-600 text-sm mt-2">Your work. Billed out.</p>
         </div>
 
-        {/* Back to Home Link */}
+        {/* Back to Login Link */}
         <div className="text-center">
-          <Link href="/" className="text-sm text-slate-600 hover:text-slate-900 inline-flex items-center gap-1">
+          <Link href="/login" className="text-sm text-slate-600 hover:text-slate-900 inline-flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Back to Home
+            Back to login
           </Link>
         </div>
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Welcome back</CardTitle>
+          <CardTitle>Reset your password</CardTitle>
           <CardDescription>
-            Sign in to your BildOut account
+            Enter your email and we'll send you a link to reset your password
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleResetRequest}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -90,23 +82,6 @@ export default function LoginPage() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link href="/reset-password" className="text-sm text-blue-600 hover:underline">
-                  Forgot password?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
               />
@@ -125,12 +100,12 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? 'Sending...' : 'Send reset link'}
             </Button>
             <p className="text-center text-sm text-slate-600">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-blue-600 hover:underline">
-                Sign up
+              Remember your password?{' '}
+              <Link href="/login" className="text-blue-600 hover:underline">
+                Sign in
               </Link>
             </p>
           </CardFooter>

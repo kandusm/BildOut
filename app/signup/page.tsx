@@ -12,6 +12,7 @@ import { COMPANY_TYPE_OPTIONS, type CompanyType } from '@/lib/company-types-conf
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [businessName, setBusinessName] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [companyType, setCompanyType] = useState<CompanyType>('other')
@@ -25,11 +26,19 @@ export default function SignupPage() {
     setLoading(true)
     setMessage(null)
 
+    // Validate password strength
+    if (password.length < 8) {
+      setMessage({ type: 'error', text: 'Password must be at least 8 characters long' })
+      setLoading(false)
+      return
+    }
+
     try {
-      const { error } = await supabase.auth.signInWithOtp({
+      const { data, error } = await supabase.auth.signUp({
         email,
+        password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/dashboard`,
           data: {
             business_name: businessName,
             display_name: displayName || email,
@@ -40,11 +49,17 @@ export default function SignupPage() {
 
       if (error) {
         setMessage({ type: 'error', text: error.message })
-      } else {
-        setMessage({
-          type: 'success',
-          text: 'Click the link that was sent to your email to complete signup!'
-        })
+      } else if (data.user) {
+        // Store signup data for verification page
+        sessionStorage.setItem('signup_email', email)
+        sessionStorage.setItem('signup_metadata', JSON.stringify({
+          business_name: businessName,
+          display_name: displayName || email,
+          company_type: companyType,
+        }))
+
+        // Redirect to verification page
+        router.push('/verify-email')
       }
     } catch (error) {
       setMessage({
@@ -140,6 +155,22 @@ export default function SignupPage() {
                 required
                 disabled={loading}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="At least 8 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={loading}
+                minLength={8}
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                Must be at least 8 characters long
+              </p>
             </div>
             {message && (
               <div

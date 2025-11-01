@@ -9,37 +9,47 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('')
+export default function UpdatePasswordPage() {
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const router = useRouter()
   const supabase = createClient()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setMessage(null)
 
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      setMessage({ type: 'error', text: 'Passwords do not match' })
+      setLoading(false)
+      return
+    }
+
+    // Validate password strength
+    if (password.length < 8) {
+      setMessage({ type: 'error', text: 'Password must be at least 8 characters long' })
+      setLoading(false)
+      return
+    }
+
     try {
-      const { data, error} = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { error } = await supabase.auth.updateUser({
+        password: password
       })
 
       if (error) {
         setMessage({ type: 'error', text: error.message })
-      } else if (data.user) {
-        // Check if email is confirmed
-        if (!data.user.email_confirmed_at) {
-          // Email not confirmed - redirect to verification
-          sessionStorage.setItem('signup_email', email)
-          router.push('/verify-email')
-        } else {
-          // Success - redirect to dashboard
+      } else {
+        setMessage({ type: 'success', text: 'Password updated successfully!' })
+
+        // Redirect to dashboard after 2 seconds
+        setTimeout(() => {
           router.push('/dashboard')
-        }
+        }, 2000)
       }
     } catch (error) {
       setMessage({
@@ -63,52 +73,39 @@ export default function LoginPage() {
           <p className="text-slate-600 text-sm mt-2">Your work. Billed out.</p>
         </div>
 
-        {/* Back to Home Link */}
-        <div className="text-center">
-          <Link href="/" className="text-sm text-slate-600 hover:text-slate-900 inline-flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
-          </Link>
-        </div>
-
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Welcome back</CardTitle>
+          <CardTitle>Set new password</CardTitle>
           <CardDescription>
-            Sign in to your BildOut account
+            Choose a strong password for your account
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleUpdatePassword}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link href="/reset-password" className="text-sm text-blue-600 hover:underline">
-                  Forgot password?
-                </Link>
-              </div>
+              <Label htmlFor="password">New Password</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Enter your password"
+                placeholder="At least 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
+                minLength={8}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="Re-enter your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                disabled={loading}
+                minLength={8}
               />
             </div>
             {message && (
@@ -123,16 +120,10 @@ export default function LoginPage() {
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
+          <CardFooter>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? 'Updating...' : 'Update password'}
             </Button>
-            <p className="text-center text-sm text-slate-600">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-blue-600 hover:underline">
-                Sign up
-              </Link>
-            </p>
           </CardFooter>
         </form>
       </Card>
