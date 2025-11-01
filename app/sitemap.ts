@@ -6,7 +6,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Static pages (only include pages that actually exist)
   const staticPages = [
     '',
-    '/home',
     '/login',
     '/signup',
     '/pricing',
