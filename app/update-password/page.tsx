@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,8 +14,21 @@ export default function UpdatePasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [sessionChecked, setSessionChecked] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+
+  // Check session on mount
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data, error }) => {
+      console.log('Update password session:', { session: data.session, error })
+      setSessionChecked(true)
+      if (!data.session) {
+        console.warn('No active session for password update')
+        setMessage({ type: 'error', text: 'Password reset link expired or invalid. Please request a new one.' })
+      }
+    })
+  }, [supabase])
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,11 +50,14 @@ export default function UpdatePasswordPage() {
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({
+      const { data, error } = await supabase.auth.updateUser({
         password: password
       })
 
+      console.log('Update password response:', { data, error })
+
       if (error) {
+        console.error('Update password error:', error)
         setMessage({ type: 'error', text: error.message })
       } else {
         setMessage({ type: 'success', text: 'Password updated successfully!' })
