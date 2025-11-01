@@ -47,9 +47,14 @@ export default function SignupPage() {
         },
       })
 
+      console.log('Signup response:', { data, error })
+
       if (error) {
+        console.error('Signup error:', error)
         setMessage({ type: 'error', text: error.message })
       } else if (data.user) {
+        console.log('User created:', data.user.id, 'Email confirmed:', data.user.email_confirmed_at)
+
         // Store signup data for verification page
         sessionStorage.setItem('signup_email', email)
         sessionStorage.setItem('signup_metadata', JSON.stringify({
@@ -60,6 +65,9 @@ export default function SignupPage() {
 
         // Redirect to verification page
         router.push('/verify-email')
+      } else {
+        console.warn('No user and no error - unexpected state:', data)
+        setMessage({ type: 'error', text: 'Signup failed - please try again' })
       }
     } catch (error) {
       setMessage({
