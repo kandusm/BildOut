@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Features - Professional Invoicing Tools | BildOut',
   description: 'Explore BildOut\'s powerful features: professional invoices, online payments, client management, and more. Everything you need to get paid faster.',
   alternates: {
-    canonical: 'https://bildout.com/features',
+    canonical: 'https://www.bildout.com/features',
   },
 }
 

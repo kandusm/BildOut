@@ -9,13 +9,13 @@ export const metadata: Metadata = {
   title: 'BildOut - Simple Invoicing for Builders & Contractors',
   description: 'Create professional invoices, accept payments, and get paid faster. BildOut streamlines billing for construction companies, contractors, plumbers, electricians, and small businesses.',
   alternates: {
-    canonical: 'https://bildout.com/',
+    canonical: 'https://www.bildout.com/',
   },
   openGraph: {
     title: 'BildOut - Simple Invoicing for Builders & Contractors',
     description: 'Create professional invoices, accept payments, and get paid faster.',
     type: 'website',
-    url: 'https://bildout.com/',
+    url: 'https://www.bildout.com/',
     images: [
       {
         url: '/og-image.png',

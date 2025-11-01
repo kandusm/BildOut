@@ -171,7 +171,7 @@ export function InvoiceSentEmail({
           </Text>
 
           <Text style={footerBranding}>
-            Invoice powered by <Link href="https://bildout.com" style={link}>BildOut</Link>
+            Invoice powered by <Link href="https://www.bildout.com" style={link}>BildOut</Link>
           </Text>
         </Container>
       </Body>

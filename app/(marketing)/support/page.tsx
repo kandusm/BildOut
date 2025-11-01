@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Support - Get Help with BildOut',
   description: 'Need help with BildOut? Browse our help resources, FAQs, and contact our support team for assistance with invoicing and payments.',
   alternates: {
-    canonical: 'https://bildout.com/support',
+    canonical: 'https://www.bildout.com/support',
   },
 }
 

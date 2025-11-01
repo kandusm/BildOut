@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Privacy Policy | BildOut',
   description: 'BildOut Privacy Policy - Learn how we collect, use, and protect your personal information.',
   alternates: {
-    canonical: 'https://bildout.com/privacy',
+    canonical: 'https://www.bildout.com/privacy',
   },
   openGraph: {
     title: 'Privacy Policy | BildOut',

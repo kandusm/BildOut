@@ -5,13 +5,13 @@ export const metadata: Metadata = {
   title: 'Refund Policy | BildOut',
   description: 'BildOut Refund Policy - Learn about our 14-day money-back guarantee and refund process.',
   alternates: {
-    canonical: '/refund',
+    canonical: 'https://www.bildout.com/refund',
   },
   openGraph: {
     title: 'Refund Policy | BildOut',
     description: 'Learn about our 14-day money-back guarantee and refund process.',
     type: 'website',
-    url: 'https://bildout.com/refund',
+    url: 'https://www.bildout.com/refund',
   },
 }
 

@@ -65,7 +65,7 @@ export function getOnboardingReminderEmail({
       </p>
       <p style="color: #cbd5e1; font-size: 12px; margin: 0;">
         BildOut - Invoice Management Platform<br>
-        <a href="https://bildout.com" style="color: #3b82f6; text-decoration: none;">bildout.com</a>
+        <a href="https://www.bildout.com" style="color: #3b82f6; text-decoration: none;">bildout.com</a>
       </p>
     </div>
   </div>
@@ -92,7 +92,7 @@ Need help? Reply to this email and we'll get back to you right away.
 
 ---
 BildOut - Invoice Management Platform
-https://bildout.com
+https://www.bildout.com
   `.trim()
 
   return { subject, html, text }

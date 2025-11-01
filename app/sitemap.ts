@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://bildout.com'
+  const baseUrl = 'https://www.bildout.com'
 
   // Static pages (only include pages that actually exist)
   const staticPages = [

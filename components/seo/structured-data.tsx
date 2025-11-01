@@ -105,8 +105,8 @@ export const schemas = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'BildOut',
-    url: 'https://bildout.com',
-    logo: 'https://bildout.com/logo.png',
+    url: 'https://www.bildout.com',
+    logo: 'https://www.bildout.com/logo.png',
     description: 'Simple invoicing software for contractors, builders, and small businesses. Create professional invoices, accept online payments, and get paid faster.',
     address: {
       '@type': 'PostalAddress',
@@ -142,7 +142,7 @@ export const schemas = {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: `https://bildout.com${item.url}`,
+      item: `https://www.bildout.com${item.url}`,
     })),
   }),
 
@@ -179,7 +179,7 @@ export const schemas = {
       name: 'BildOut',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bildout.com/logo.png',
+        url: 'https://www.bildout.com/logo.png',
       },
     },
     datePublished: article.publishDate,
@@ -191,7 +191,7 @@ export const schemas = {
     '@type': 'LocalBusiness',
     name: `BildOut - Invoicing for ${city} Contractors`,
     description,
-    url: `https://bildout.com/${city.toLowerCase()}`,
+    url: `https://www.bildout.com/${city.toLowerCase()}`,
     areaServed: {
       '@type': 'City',
       name: `${city}, ${state}`,

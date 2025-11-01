@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Terms of Service | BildOut',
   description: 'BildOut Terms of Service - Review the terms and conditions for using our invoicing platform.',
   alternates: {
-    canonical: 'https://bildout.com/terms',
+    canonical: 'https://www.bildout.com/terms',
   },
   openGraph: {
     title: 'Terms of Service | BildOut',

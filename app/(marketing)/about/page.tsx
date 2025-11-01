@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'About BildOut - Simple Invoicing for Builders',
   description: 'Learn about BildOut, our mission to simplify billing for contractors and small businesses, and how we help you get paid faster.',
   alternates: {
-    canonical: 'https://bildout.com/about',
+    canonical: 'https://www.bildout.com/about',
   },
 }
 
