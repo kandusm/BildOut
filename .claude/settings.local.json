@@ -14,7 +14,14 @@
       "Read(//c/**)",
       "Bash(npm run dev:*)",
       "Bash(curl:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(vercel env:*)",
+      "Bash(supabase --version:*)",
+      "Bash(npm install:*)",
+      "Bash(stripe prices list:*)",
+      "Bash(stripe accounts list:*)"
     ],
     "deny": [],
     "ask": []

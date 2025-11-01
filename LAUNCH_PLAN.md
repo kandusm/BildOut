@@ -440,20 +440,103 @@
     - Consider adding retry logic to webhook handler
     - Add better error logging to identify exact failure point
 
-### Missing Features
+### Authentication & Security Enhancements
 
-- [ ] **Password change functionality in settings**
-  - **Issue:** Users cannot change their password from the settings page
-  - **Current Status:** No password change UI in General Settings
-  - **Workaround:** Users can use "Forgot Password" flow from login page
-  - **Impact:** Low - Workaround exists, not blocking core functionality
-  - **Priority:** P2 (Medium) - Add within first month
+- [ ] **Implement Password + MFA Authentication Flow**
+  - **Issue:** Currently using magic link only for signup and login, which lacks the security of password + MFA
+  - **Current Status:** Magic link authentication for all users (no passwords, no MFA)
+  - **Workaround:** None - this is an architectural change, not a bug
+  - **Impact:** High - Security improvement, better user experience for returning users
+  - **Priority:** P1 (High) - Implement within 1-2 months post-launch
+  - **New Authentication Flow:**
+    1. **Initial Signup (unchanged):**
+       - User enters email
+       - Receive magic link email
+       - Click magic link to verify email address
+    2. **Post-Verification Setup (NEW):**
+       - After first magic link login, redirect to `/onboarding/security`
+       - Require user to create password (min 12 chars, complexity requirements)
+       - Prompt user to select MFA method(s):
+         - **TOTP/Authenticator App** (Google Authenticator, Authy, 1Password) - Recommended
+         - **SMS** (phone number required)
+         - **Email OTP** (magic link as MFA option)
+         - Allow multiple MFA methods (backup methods)
+       - Cannot proceed to dashboard until password + at least one MFA method configured
+    3. **Subsequent Logins:**
+       - User enters email + password
+       - After password validation, prompt for MFA code
+       - User provides code from selected MFA method
+       - Access granted after successful MFA
+    4. **Forgot Password Flow:**
+       - User clicks "Forgot Password" on login page
+       - Receive password reset email with link
+       - Set new password
+       - Must still complete MFA to login
   - **Implementation needed:**
-    - Add "Change Password" section to General Settings form
-    - Require current password for security
-    - Add API endpoint for password update via Supabase Auth
-    - Test password reset email flow
-    - Validate password strength requirements
+    - **Database/Auth changes:**
+      - Enable password authentication in Supabase Auth settings
+      - Add `password_set` boolean to track if user has set password
+      - Add `mfa_methods` JSON array to track enabled MFA methods
+      - Store phone number for SMS MFA (encrypted)
+    - **New pages/components:**
+      - `/onboarding/security` - Password + MFA setup page
+      - Password creation form with strength indicator
+      - MFA method selection (checkboxes for multiple)
+      - TOTP QR code generation and verification
+      - SMS verification flow
+      - Email OTP flow
+    - **Updated pages:**
+      - Login page: Add password field
+      - Login page: Add MFA code input (after password)
+      - Settings → Security: Manage MFA methods, change password
+      - Settings → Security: Add/remove backup MFA methods
+    - **API routes:**
+      - `/api/auth/setup-password` - Set password after magic link
+      - `/api/auth/setup-mfa` - Configure MFA methods
+      - `/api/auth/verify-mfa` - Verify MFA code during login
+      - `/api/auth/send-otp` - Send OTP for email/SMS MFA
+      - `/api/auth/change-password` - Change password (with current password verification)
+    - **Middleware updates:**
+      - Check if logged-in user has set password + MFA
+      - Redirect to `/onboarding/security` if not completed
+      - Allow skipping onboarding/security for magic link MFA only (optional grace period)
+  - **Migration strategy for existing users:**
+    - Add `password_set` = false for all existing users
+    - On next login, redirect to `/onboarding/security` to set password + MFA
+    - Show notification: "We've upgraded security! Please set a password and enable MFA."
+    - Allow 30-day grace period where users can skip (but show persistent reminder)
+    - After grace period, enforce password + MFA requirement
+  - **User experience considerations:**
+    - Progressive security: Don't overwhelm new users immediately
+    - Clear explanations of why MFA is important
+    - QR code + manual entry code for TOTP setup
+    - Generate backup codes (10x one-time use codes) for account recovery
+    - Allow users to download/print backup codes
+    - "Trust this device for 30 days" option to reduce MFA friction
+  - **Recovery flows:**
+    - Lost MFA device: Use backup codes to login
+    - Lost backup codes: Email support for manual verification (admin reset)
+    - SMS not received: Option to resend or use alternative method
+  - **Security settings page:**
+    - View enabled MFA methods
+    - Add new MFA method (require current MFA verification)
+    - Remove MFA method (require at least one remains)
+    - Regenerate backup codes
+    - Change password
+    - View login history (optional future feature)
+  - **Benefits:**
+    - Industry-standard security (password + MFA)
+    - Protects against account takeover
+    - Better user experience for returning users (no waiting for email)
+    - Compliance with security best practices
+    - Magic link still useful for email verification and as MFA option
+  - **Considerations:**
+    - Supabase supports MFA natively (TOTP)
+    - SMS requires Twilio integration (additional cost ~$0.01/SMS)
+    - Email OTP is essentially magic link (already implemented)
+    - May need to add phone number field to users table
+    - TOTP is most secure and cost-effective (recommended default)
+    - Consider making MFA optional for personal users but required for team/business plans
 
 - [ ] **Embedded Stripe Checkout for subscriptions**
   - **Issue:** Stripe Payment Links work but redirect users away from the site
