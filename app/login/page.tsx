@@ -34,15 +34,21 @@ export default function LoginPage() {
         console.error('Login error:', error)
         setMessage({ type: 'error', text: error.message })
       } else if (data.user) {
+        console.log('User logged in successfully, email_confirmed_at:', data.user.email_confirmed_at)
+
         // Check if email is confirmed
         if (!data.user.email_confirmed_at) {
+          console.log('Email not confirmed, redirecting to verify-email')
           // Email not confirmed - redirect to verification
           sessionStorage.setItem('signup_email', email)
           router.push('/verify-email')
         } else {
+          console.log('Email confirmed, redirecting to dashboard')
           // Success - redirect to dashboard
           router.push('/dashboard')
         }
+      } else {
+        console.warn('Login succeeded but no user in response:', data)
       }
     } catch (error) {
       setMessage({
