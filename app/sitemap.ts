@@ -3,16 +3,14 @@ import { MetadataRoute } from 'next'
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://bildout.com'
 
-  // Static pages
+  // Static pages (only include pages that actually exist)
   const staticPages = [
     '',
     '/home',
     '/login',
     '/signup',
     '/pricing',
-    '/features',
-    '/about',
-    '/support',
+    '/contact',
     '/privacy',
     '/terms',
     '/refund',
