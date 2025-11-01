@@ -9,7 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: [
           '/',
-          '/home',
           '/pricing',
           '/features',
           '/about',
@@ -18,6 +17,9 @@ export default function robots(): MetadataRoute.Robots {
           '/terms',
           '/login',
           '/signup',
+          '/guides',
+          '/templates',
+          '/blog',
           // Add your SEO pages here:
           // '/invoice-templates/',
           // '/how-to/',
