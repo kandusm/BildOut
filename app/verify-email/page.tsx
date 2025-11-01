@@ -66,16 +66,11 @@ export default function VerifyEmailPage() {
     setMessage(null)
 
     try {
-      // Get metadata from session storage
-      const metadata = sessionStorage.getItem('signup_metadata')
-      const parsedMetadata = metadata ? JSON.parse(metadata) : {}
-
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email,
         options: {
           emailRedirectTo: `${window.location.origin}/dashboard`,
-          data: parsedMetadata,
         },
       })
 
