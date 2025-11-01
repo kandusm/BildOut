@@ -45,7 +45,7 @@ export default function LoginPage() {
         } else {
           console.log('Email confirmed, redirecting to dashboard')
           // Success - redirect to dashboard
-          router.push('/dashboard')
+          window.location.href = '/dashboard'
         }
       } else {
         console.warn('Login succeeded but no user in response:', data)
