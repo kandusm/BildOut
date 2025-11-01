@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Invoicing Guides - How to Get Paid Faster | BildOut',
   description: 'Learn how to create professional invoices, accept online payments, and get paid faster. Free guides for contractors, builders, and small businesses.',
   alternates: {
-    canonical: '/guides',
+    canonical: 'https://bildout.com/guides',
   },
   openGraph: {
     title: 'Invoicing Guides - How to Get Paid Faster | BildOut',

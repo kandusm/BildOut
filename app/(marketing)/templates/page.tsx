@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Invoice Templates - Free Templates for Every Industry | BildOut',
   description: 'Professional invoice templates for construction, plumbing, electrical, landscaping, HVAC, and more. Free customizable templates designed for contractors and small businesses.',
   alternates: {
-    canonical: '/templates',
+    canonical: 'https://bildout.com/templates',
   },
   openGraph: {
     title: 'Invoice Templates - Free Templates for Every Industry | BildOut',

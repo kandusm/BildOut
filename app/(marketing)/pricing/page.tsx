@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Pricing - Simple, Transparent Invoicing Plans | BildOut',
   description: 'Start free forever. Upgrade to Pro for $15/month for advanced features. No hidden fees, cancel anytime.',
   alternates: {
-    canonical: '/pricing',
+    canonical: 'https://bildout.com/pricing',
   },
   openGraph: {
     title: 'Pricing - Simple, Transparent Invoicing Plans | BildOut',
